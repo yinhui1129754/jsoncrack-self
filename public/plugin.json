@@ -1,0 +1,18 @@
+{
+  "main": "html/editor.html",
+  "logo": "html/assets/192.png",
+  "features": [
+    {
+      "code": "editor",
+      "explain": "编辑JSON导图",
+      "cmds":["json", "json导图", "思维导图","j导图",
+        {
+          "type": "regex",
+          "label": "json思维导图",
+          "match": "/^[\\{\\[](.|\\n)*[\\}\\]]$/",
+          "minLength": 5
+        }
+      ]
+    }
+  ]
+}

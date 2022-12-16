@@ -10,6 +10,7 @@ const withPWA = require("next-pwa")({
  */
 const nextConfig = {
   reactStrictMode: true,
+  assetPrefix: "./"
 };
 
 module.exports = withPWA(nextConfig);

@@ -4,8 +4,6 @@ import { useRouter } from "next/router";
 import { init } from "@sentry/nextjs";
 import { decompress } from "compress-json";
 import { Toaster } from "react-hot-toast";
-import { GoogleAnalytics } from "src/components/GoogleAnalytics";
-import { SupportButton } from "src/components/SupportButton";
 import GlobalStyle from "src/constants/globalStyle";
 import { darkTheme, lightTheme } from "src/constants/theme";
 import useConfig from "src/store/useConfig";
@@ -50,7 +48,6 @@ function JsonCrack({ Component, pageProps }: AppProps) {
   if (isRendered)
     return (
       <>
-        <GoogleAnalytics />
         <ThemeProvider theme={lightmode ? lightTheme : darkTheme}>
           <GlobalStyle />
           <Component {...pageProps} />
@@ -66,7 +63,6 @@ function JsonCrack({ Component, pageProps }: AppProps) {
               },
             }}
           />
-          <SupportButton />
         </ThemeProvider>
       </>
     );

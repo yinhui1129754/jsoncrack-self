@@ -51,10 +51,10 @@ const StyledMessage = styled.div`
 export const Loading: React.FC<LoadingProps> = ({ message }) => (
   <StyledLoading>
     <StyledLogo>
-      <StyledText>JSON</StyledText> Crack
+      <StyledText>JSON</StyledText> 导图
     </StyledLogo>
     <StyledMessage>
-      {message ?? "Preparing the environment for you..."}
+      {message ?? "正在为您准备环境 ..."}
     </StyledMessage>
   </StyledLoading>
 );

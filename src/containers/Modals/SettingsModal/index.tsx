@@ -37,19 +37,19 @@ export const SettingsModal: React.FC<{
       <Modal.Content>
         <StyledModalWrapper>
           <StyledToggle onChange={toggleHideCollapse} checked={hideCollapse}>
-            Hide Collapse/Expand Button
+            隐藏折叠/展开按钮
           </StyledToggle>
           <StyledToggle
             onChange={toggleHideChildrenCount}
             checked={hideChildrenCount}
           >
-            Hide Children Count
+            隐藏子数量统计
           </StyledToggle>
           <StyledToggle
             onChange={() => setLightTheme(!lightmode)}
             checked={lightmode}
           >
-            Enable Light Theme
+            启用白天模式
           </StyledToggle>
         </StyledModalWrapper>
       </Modal.Content>

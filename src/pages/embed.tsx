@@ -12,10 +12,10 @@ const Embed = () => {
   return (
     <>
       <Head>
-        <title>Creating JSON Crack Embed | JSON Crack</title>
+        <title>JSON 导图</title>
         <meta
           name="description"
-          content="Embedding JSON Crack tutorial into your websites."
+          content="将Json导图嵌入的你网站."
         />
       </Head>
       <StyledPageWrapper

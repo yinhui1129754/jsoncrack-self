@@ -27,10 +27,10 @@ const EditorPage: React.FC = () => {
   return (
     <StyledEditorWrapper>
       <Head>
-        <title>Editor | JSON Crack</title>
+        <title>编辑 | JSON 导图</title>
         <meta
           name="description"
-          content="View your JSON data in graphs instantly."
+          content="立即以图表形式查看JSON数据。"
         />
       </Head>
       <StyledPageWrapper>

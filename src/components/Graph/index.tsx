@@ -131,7 +131,7 @@ const GraphComponent = ({
 
   return (
     <StyledEditorWrapper isWidget={isWidget} onContextMenu={e => e.preventDefault()}>
-      {loading && <Loading message="Painting graph..." />}
+      {loading && <Loading message="加载图形...." />}
       <TransformWrapper
         maxScale={2}
         minScale={0.05}

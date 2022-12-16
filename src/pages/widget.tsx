@@ -121,13 +121,7 @@ const WidgetPage = () => {
 
   if (query.json)
     return (
-      <StyledDeprecated>
-        <h1>⚠️ Deprecated ⚠️</h1>
         <br />
-        <a href="https://jsoncrack.com/embed" target="_blank" rel="noreferrer">
-          https://jsoncrack.com/embed
-        </a>
-      </StyledDeprecated>
     );
 
   return (
@@ -139,7 +133,7 @@ const WidgetPage = () => {
         closeModal={() => setModalVisible(false)}
       />
       <StyledAttribute href={`${baseURL}/editor`} target="_blank" rel="noreferrer">
-        jsoncrack.com
+        editor
       </StyledAttribute>
     </ThemeProvider>
   );

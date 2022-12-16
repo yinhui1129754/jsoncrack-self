@@ -95,7 +95,7 @@ const StyledColorIndicator = styled.div<{ color: string }>`
 export const DownloadModal: React.FC<ModalProps> = ({ visible, setVisible }) => {
   const setConfig = useConfig(state => state.setConfig);
   const [fileDetails, setFileDetails] = React.useState({
-    filename: "jsoncrack.com",
+    filename: "json_image",
     backgroundColor: "transparent",
     quality: 1,
   });

@@ -83,7 +83,7 @@ export const MonacoEditor = ({
         theme={lightmode}
         options={editorOptions}
         onChange={setValue}
-        loading={<Loading message="Loading Editor..." />}
+        loading={<Loading message="加载中 ..." />}
         beforeMount={handleEditorWillMount}
       />
     </StyledWrapper>

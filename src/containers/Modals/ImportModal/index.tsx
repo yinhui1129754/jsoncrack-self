@@ -54,14 +54,14 @@ export const ImportModal: React.FC<ModalProps> = ({ visible, setVisible }) => {
     if (url) {
       setJsonFile(null);
 
-      toast.loading("Loading...", { id: "toastFetch" });
+      toast.loading("加载中...", { id: "toastFetch" });
       return fetch(url)
         .then(res => res.json())
         .then(json => {
           setJson(JSON.stringify(json));
           setVisible(false);
         })
-        .catch(() => toast.error("Failed to fetch JSON!"))
+        .catch(() => toast.error("JSON读取失败!"))
         .finally(() => toast.dismiss("toastFetch"));
     }
 
@@ -84,7 +84,7 @@ export const ImportModal: React.FC<ModalProps> = ({ visible, setVisible }) => {
           value={url}
           onChange={e => setURL(e.target.value)}
           type="url"
-          placeholder="URL of JSON to fetch"
+          placeholder="URL或JSON"
         />
         <StyledUploadWrapper>
           <input
@@ -94,8 +94,8 @@ export const ImportModal: React.FC<ModalProps> = ({ visible, setVisible }) => {
             accept="application/JSON"
           />
           <AiOutlineUpload size={48} />
-          <StyledUploadMessage>Click Here to Upload JSON</StyledUploadMessage>
-          <StyledFileName>{jsonFile?.name ?? "None"}</StyledFileName>
+          <StyledUploadMessage>点击上传文件</StyledUploadMessage>
+          <StyledFileName>{jsonFile?.name ?? "空"}</StyledFileName>
         </StyledUploadWrapper>
       </StyledModalContent>
       <Modal.Controls setVisible={setVisible}>
@@ -104,7 +104,7 @@ export const ImportModal: React.FC<ModalProps> = ({ visible, setVisible }) => {
           onClick={handleImportFile}
           disabled={!(jsonFile || url)}
         >
-          Import
+          导入
         </Button>
       </Modal.Controls>
     </Modal>

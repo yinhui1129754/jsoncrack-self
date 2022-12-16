@@ -41,7 +41,7 @@ const Controls: React.FC<ControlProps> = ({ children, setVisible }) => {
 
   return (
     <Styled.ControlsWrapper>
-      <Button onClick={() => setVisible(false)}>Close</Button>
+      <Button onClick={() => setVisible(false)}>关闭</Button>
       {children}
     </Styled.ControlsWrapper>
   );

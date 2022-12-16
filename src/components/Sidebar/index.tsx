@@ -3,16 +3,12 @@ import Link from "next/link";
 import toast from "react-hot-toast";
 import {
   AiOutlineDelete,
-  AiFillGithub,
-  AiOutlineTwitter,
   AiOutlineSave,
   AiOutlineFileAdd,
-  AiOutlineLink,
   AiOutlineEdit,
 } from "react-icons/ai";
 import { CgArrowsMergeAltH, CgArrowsShrinkH } from "react-icons/cg";
 import { FiDownload } from "react-icons/fi";
-import { HiHeart } from "react-icons/hi";
 import { MdCenterFocusWeak } from "react-icons/md";
 import { TiFlowMerge } from "react-icons/ti";
 import { VscCollapseAll, VscExpandAll } from "react-icons/vsc";
@@ -20,7 +16,6 @@ import { Tooltip } from "src/components/Tooltip";
 import { ClearModal } from "src/containers/Modals/ClearModal";
 import { DownloadModal } from "src/containers/Modals/DownloadModal";
 import { ImportModal } from "src/containers/Modals/ImportModal";
-import { ShareModal } from "src/containers/Modals/ShareModal";
 import useConfig from "src/store/useConfig";
 import useGraph from "src/store/useGraph";
 import { getNextDirection } from "src/utils/getNextDirection";
@@ -174,7 +169,7 @@ export const Sidebar: React.FC = () => {
 
   const toggleFoldNodes = () => {
     setConfig("foldNodes", !foldNodes);
-    toast(`${foldNodes ? "Unfolded" : "Folded"} nodes`);
+    toast(`${foldNodes ? "展开" : "折叠"} 节点`);
   };
 
   const toggleDirection = () => {
@@ -186,7 +181,7 @@ export const Sidebar: React.FC = () => {
     if (graphCollapsed) expandGraph();
     else collapseGraph();
 
-    toast(`${graphCollapsed ? "Expanded" : "Collapsed"} graph.`);
+    toast(`${graphCollapsed ? "展开" : "折叠"} 图形.`);
   };
 
   return (
@@ -198,29 +193,29 @@ export const Sidebar: React.FC = () => {
             <StyledText secondary>C</StyledText>
           </StyledElement>
         </Link>
-        <Tooltip className="mobile" title="Edit JSON">
+        <Tooltip className="mobile" title="编辑 JSON">
           <StyledElement onClick={() => setConfig("hideEditor", !hideEditor)}>
             <AiOutlineEdit />
           </StyledElement>
         </Tooltip>
-        <Tooltip title="Import File">
+        <Tooltip title="添加">
           <StyledElement onClick={() => setUploadVisible(true)}>
             <AiOutlineFileAdd />
           </StyledElement>
         </Tooltip>
-        <Tooltip title="Rotate Layout">
+        <Tooltip title="旋转">
           <StyledElement onClick={toggleDirection}>
             <StyledFlowIcon rotate={rotateLayout(direction)} />
           </StyledElement>
         </Tooltip>
-        <Tooltip className="mobile" title="Center View">
+        <Tooltip className="mobile" title="居中">
           <StyledElement onClick={centerView}>
             <MdCenterFocusWeak />
           </StyledElement>
         </Tooltip>
         <Tooltip
           className="desktop"
-          title={foldNodes ? "Unfold Nodes" : "Fold Nodes"}
+          title={foldNodes ? "展开节点" : "折叠节点"}
         >
           <StyledElement onClick={toggleFoldNodes}>
             {foldNodes ? <CgArrowsShrinkH /> : <CgArrowsMergeAltH />}
@@ -228,59 +223,30 @@ export const Sidebar: React.FC = () => {
         </Tooltip>
         <Tooltip
           className="desktop"
-          title={graphCollapsed ? "Expand Graph" : "Collapse Graph"}
+          title={graphCollapsed ? "展开图" : "折叠图"}
         >
           <StyledElement onClick={toggleExpandCollapseGraph}>
             {graphCollapsed ? <VscExpandAll /> : <VscCollapseAll />}
           </StyledElement>
         </Tooltip>
-        <Tooltip className="desktop" title="Save JSON">
+        <Tooltip className="desktop" title="保存">
           <StyledElement onClick={handleSave}>
             <AiOutlineSave />
           </StyledElement>
         </Tooltip>
-        <Tooltip className="mobile" title="Download Image">
+        <Tooltip className="mobile" title="下载图片">
           <StyledElement onClick={() => setDownloadVisible(true)}>
             <FiDownload />
           </StyledElement>
         </Tooltip>
-        <Tooltip title="Clear JSON">
+        <Tooltip title="清除">
           <StyledElement onClick={() => setClearVisible(true)}>
             <AiOutlineDelete />
           </StyledElement>
         </Tooltip>
-        <Tooltip className="desktop" title="Share">
-          <StyledElement onClick={() => setShareVisible(true)}>
-            <AiOutlineLink />
-          </StyledElement>
-        </Tooltip>
       </StyledTopWrapper>
-      <StyledBottomWrapper>
-        <StyledElement>
-          <Link href="https://twitter.com/jsoncrack">
-            <a aria-label="Twitter" rel="me" target="_blank">
-              <AiOutlineTwitter />
-            </a>
-          </Link>
-        </StyledElement>
-        <StyledElement>
-          <Link href="https://github.com/AykutSarac/jsoncrack.com">
-            <a aria-label="GitHub" rel="me" target="_blank">
-              <AiFillGithub />
-            </a>
-          </Link>
-        </StyledElement>
-        <StyledElement>
-          <Link href="https://github.com/sponsors/AykutSarac">
-            <a aria-label="GitHub Sponsors" rel="me" target="_blank">
-              <HiHeart />
-            </a>
-          </Link>
-        </StyledElement>
-      </StyledBottomWrapper>
       <ImportModal visible={uploadVisible} setVisible={setUploadVisible} />
       <ClearModal visible={clearVisible} setVisible={setClearVisible} />
-      <ShareModal visible={shareVisible} setVisible={setShareVisible} />
       <DownloadModal visible={isDownloadVisible} setVisible={setDownloadVisible} />
     </StyledSidebar>
   );

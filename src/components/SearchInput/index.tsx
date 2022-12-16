@@ -73,7 +73,7 @@ export const SearchInput: React.FC = () => {
           type="text"
           value={content.value}
           onChange={e => setContent(val => ({ ...val, value: e.target.value }))}
-          placeholder="Search Node"
+          placeholder="搜索节点"
         />
         <StyledSearchButton type="reset" aria-label="search" onClick={handleClear}>
           {content.value ? (
