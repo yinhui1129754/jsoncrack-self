@@ -34,5 +34,4 @@ const sampleJson = Object.freeze({
     },
   ],
 });
-
 export const defaultJson = JSON.stringify(sampleJson, null, 2);

@@ -33,7 +33,7 @@ export const SettingsModal: React.FC<{
 
   return (
     <Modal visible={visible} setVisible={setVisible}>
-      <Modal.Header>Settings</Modal.Header>
+      <Modal.Header>设置</Modal.Header>
       <Modal.Content>
         <StyledModalWrapper>
           <StyledToggle onChange={toggleHideCollapse} checked={hideCollapse}>

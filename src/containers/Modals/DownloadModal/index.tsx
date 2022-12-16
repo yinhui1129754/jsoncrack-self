@@ -102,7 +102,7 @@ export const DownloadModal: React.FC<ModalProps> = ({ visible, setVisible }) => 
 
   const clipboardImage = async () => {
     try {
-      toast.loading("Copying to clipboard...", { id: "toastClipboard" });
+      toast.loading("复制到剪切板...", { id: "toastClipboard" });
       setConfig("performanceMode", false);
 
       const imageElement = document.querySelector("svg[id*='ref']") as HTMLElement;
@@ -132,7 +132,7 @@ export const DownloadModal: React.FC<ModalProps> = ({ visible, setVisible }) => 
 
   const exportAsImage = async () => {
     try {
-      toast.loading("Downloading...", { id: "toastDownload" });
+      toast.loading("下载中...", { id: "toastDownload" });
       setConfig("performanceMode", false);
 
       const imageElement = document.querySelector("svg[id*='ref']") as HTMLElement;
@@ -157,20 +157,20 @@ export const DownloadModal: React.FC<ModalProps> = ({ visible, setVisible }) => 
 
   return (
     <Modal visible={visible} setVisible={setVisible}>
-      <Modal.Header>Download Image</Modal.Header>
+      <Modal.Header>下载图片</Modal.Header>
       <Modal.Content>
         <StyledContainer>
-          File Name
+          文件名
           <StyledColorWrapper>
             <Input
-              placeholder="File Name"
+              placeholder="文件名e"
               value={fileDetails.filename}
               onChange={e => updateDetails("filename", e.target.value)}
             />
           </StyledColorWrapper>
         </StyledContainer>
         <StyledContainer>
-          Background Color
+          背景颜色
           <StyledColorWrapper>
             <TwitterPicker
               triangle="hide"
@@ -187,11 +187,11 @@ export const DownloadModal: React.FC<ModalProps> = ({ visible, setVisible }) => 
       </Modal.Content>
       <Modal.Controls setVisible={setVisible}>
         <Button status="SECONDARY" onClick={clipboardImage}>
-          <FiCopy size={18} /> Clipboard
+          <FiCopy size={16} /> 复制
         </Button>
         <Button status="SUCCESS" onClick={exportAsImage}>
-          <FiDownload size={18} />
-          Download
+          <FiDownload size={16} />
+          下载
         </Button>
       </Modal.Controls>
     </Modal>

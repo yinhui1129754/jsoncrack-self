@@ -1,6 +1,7 @@
 {
-  "main": "html/editor.html",
-  "logo": "html/assets/192.png",
+  "main": "editor.html",
+  "preload": "preload.js",
+  "logo": "assets/192.png",
   "features": [
     {
       "code": "editor",

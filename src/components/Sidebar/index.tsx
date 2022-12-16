@@ -169,7 +169,7 @@ export const Sidebar: React.FC = () => {
 
   const toggleFoldNodes = () => {
     setConfig("foldNodes", !foldNodes);
-    toast(`${foldNodes ? "展开" : "折叠"} 节点`);
+    toast(`${foldNodes ? "展开" : "折叠"}节点`);
   };
 
   const toggleDirection = () => {
@@ -181,7 +181,7 @@ export const Sidebar: React.FC = () => {
     if (graphCollapsed) expandGraph();
     else collapseGraph();
 
-    toast(`${graphCollapsed ? "展开" : "折叠"} 图形.`);
+    toast(`${graphCollapsed ? "展开" : "折叠"}图形`);
   };
 
   return (

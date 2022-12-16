@@ -90,7 +90,7 @@ const TextNode: React.FC<CustomNodeProps> = ({
 
         {inViewport && data.parent && hasCollapse && !hideCollapse && (
           <StyledExpand onClick={handleExpand}>
-            {isExpanded ? <MdLinkOff size={18} /> : <MdLink size={18} />}
+            {isExpanded ? <MdLinkOff size={16} /> : <MdLink size={16} />}
           </StyledExpand>
         )}
       </StyledTextNodeWrapper>

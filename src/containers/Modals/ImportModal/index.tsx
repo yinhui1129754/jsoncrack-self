@@ -78,7 +78,7 @@ export const ImportModal: React.FC<ModalProps> = ({ visible, setVisible }) => {
 
   return (
     <Modal visible={visible} setVisible={setVisible}>
-      <Modal.Header>Import JSON</Modal.Header>
+      <Modal.Header>添加JSON</Modal.Header>
       <StyledModalContent>
         <Input
           value={url}
@@ -93,7 +93,7 @@ export const ImportModal: React.FC<ModalProps> = ({ visible, setVisible }) => {
             type="file"
             accept="application/JSON"
           />
-          <AiOutlineUpload size={48} />
+          <AiOutlineUpload size={46} />
           <StyledUploadMessage>点击上传文件</StyledUploadMessage>
           <StyledFileName>{jsonFile?.name ?? "空"}</StyledFileName>
         </StyledUploadWrapper>

@@ -38,7 +38,7 @@ export const NodeModal = ({ selectedNode, visible, closeModal }: NodeModalProps)
 
   return (
     <Modal visible={visible} setVisible={closeModal}>
-      <Modal.Header>Node Content</Modal.Header>
+      <Modal.Header>节点内容</Modal.Header>
       <Modal.Content>
         <StyledTextarea
           defaultValue={JSON.stringify(
@@ -54,7 +54,7 @@ export const NodeModal = ({ selectedNode, visible, closeModal }: NodeModalProps)
       </Modal.Content>
       <Modal.Controls setVisible={closeModal}>
         <Button status="SECONDARY" onClick={handleClipboard}>
-          <FiCopy size={18} /> Clipboard
+          <FiCopy size={16} /> 复制
         </Button>
       </Modal.Controls>
     </Modal>

@@ -51,9 +51,9 @@ const Toggle: React.FC<ToggleProps> = ({ children, checked = false, onChange }) 
     <StyledToggleWrapper>
       <StyledToggle active={isChecked} onClick={handleClick}>
         {isChecked ? (
-          <IoIosCheckmarkCircle size={22} color="white" />
+          <IoIosCheckmarkCircle size={20} color="white" />
         ) : (
-          <IoMdCloseCircle size={22} color="white" />
+          <IoMdCloseCircle size={20} color="white" />
         )}
         <input type="checkbox" checked={isChecked} onChange={handleClick} />
       </StyledToggle>

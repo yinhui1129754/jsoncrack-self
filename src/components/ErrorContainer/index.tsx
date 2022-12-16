@@ -46,9 +46,9 @@ export const ErrorContainer = ({ hasError }: { hasError: boolean }) => {
       <StyledErrorExpand error={hasError}>
         <StyledTitle>
           {hasError ? (
-            <MdReportGmailerrorred size={20} />
+            <MdReportGmailerrorred size={18} />
           ) : (
-            <MdOutlineCheckCircleOutline size={20} />
+            <MdOutlineCheckCircleOutline size={18} />
           )}
           {hasError ? "非法JSON" : "有效JSON"}
         </StyledTitle>

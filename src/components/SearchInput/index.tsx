@@ -77,9 +77,9 @@ export const SearchInput: React.FC = () => {
         />
         <StyledSearchButton type="reset" aria-label="search" onClick={handleClear}>
           {content.value ? (
-            <IoCloseSharp size={18} />
+            <IoCloseSharp size={16} />
           ) : (
-            <AiOutlineSearch size={18} />
+            <AiOutlineSearch size={16} />
           )}
         </StyledSearchButton>
       </StyledForm>

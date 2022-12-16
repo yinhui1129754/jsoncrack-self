@@ -15,11 +15,11 @@ export const ClearModal: React.FC<ModalProps> = ({ visible, setVisible }) => {
 
   return (
     <Modal visible={visible} setVisible={setVisible}>
-      <Modal.Header>Clear JSON</Modal.Header>
-      <Modal.Content>Are you sure you want to clear JSON?</Modal.Content>
+      <Modal.Header>清除JSON</Modal.Header>
+      <Modal.Content>你确定要清除JSON吗?</Modal.Content>
       <Modal.Controls setVisible={setVisible}>
         <Button status="DANGER" onClick={handleClear}>
-          Confirm
+          确认
         </Button>
       </Modal.Controls>
     </Modal>
