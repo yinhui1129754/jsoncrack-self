@@ -54,7 +54,7 @@ export const Loading: React.FC<LoadingProps> = ({ message }) => (
       <StyledText>JSON</StyledText> 导图
     </StyledLogo>
     <StyledMessage>
-      {message ?? "正在为您准备环境 ..."}
+      {message ?? "环境准备中 ..."}
     </StyledMessage>
   </StyledLoading>
 );
