@@ -27,17 +27,17 @@ function JsonCrack({Component, pageProps}: AppProps) {
     const [isRendered, setRendered] = React.useState(false);
     React.useEffect(() => {
         let timer = setInterval(() => {
-            window.localStorage.setItem("json_crack_history", getJson());
+            utools.dbStorage.setItem("json_crack_history", getJson());
         }, 1000);
-        let history = window.localStorage.getItem("json_crack_history");
+        let history = utools.dbStorage.getItem("json_crack_history");
         if (history != null) {
             setJson(history + "");
         }
 
         let payLoadScan = setInterval(() => {
-            let payload = window.localStorage.getItem("json_crack_payload");
+            let payload = utools.dbStorage.getItem("json_crack_payload");
             if (payload != null) {
-                window.localStorage.removeItem("json_crack_payload")
+                utools.dbStorage.removeItem("json_crack_payload")
                 let validJson = isValidJson(payload + "");
                 if (validJson) {
                     setJson(validJson);
@@ -52,6 +52,7 @@ function JsonCrack({Component, pageProps}: AppProps) {
     }, [getJson, setJson, setLightMode]);
 
     React.useEffect(() => {
+
         setRendered(true);
     }, []);
 

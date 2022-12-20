@@ -1,9 +1,9 @@
 import React from "react";
 import toast from "react-hot-toast";
-import { AiOutlineUpload } from "react-icons/ai";
-import { Button } from "src/components/Button";
-import { Input } from "src/components/Input";
-import { Modal, ModalProps } from "src/components/Modal";
+import {AiOutlineUpload} from "react-icons/ai";
+import {Button} from "src/components/Button";
+import {Input} from "src/components/Input";
+import {Modal, ModalProps} from "src/components/Modal";
 import useConfig from "src/store/useConfig";
 import styled from "styled-components";
 
@@ -19,94 +19,96 @@ const StyledUploadWrapper = styled.label`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background: ${({ theme }) => theme.BACKGROUND_SECONDARY};
-  border: 2px dashed ${({ theme }) => theme.BACKGROUND_TERTIARY};
+  background: ${({theme}) => theme.BACKGROUND_SECONDARY};
+  border: 2px dashed ${({theme}) => theme.BACKGROUND_TERTIARY};
   border-radius: 5px;
   width: 100%;
   min-height: 200px;
   padding: 16px;
   cursor: pointer;
-
-  input[type="file"] {
-    display: none;
-  }
 `;
 
 const StyledFileName = styled.span`
-  color: ${({ theme }) => theme.INTERACTIVE_NORMAL};
+  font-size: 12px;
+  color: ${({theme}) => theme.INTERACTIVE_NORMAL};
 `;
 
 const StyledUploadMessage = styled.h3`
-  color: ${({ theme }) => theme.INTERACTIVE_ACTIVE};
+  color: ${({theme}) => theme.INTERACTIVE_ACTIVE};
   margin-bottom: 0;
 `;
 
-export const ImportModal: React.FC<ModalProps> = ({ visible, setVisible }) => {
-  const setJson = useConfig(state => state.setJson);
-  const [url, setURL] = React.useState("");
-  const [jsonFile, setJsonFile] = React.useState<File | null>(null);
+export const ImportModal: React.FC<ModalProps> = ({visible, setVisible}) => {
+    const setJson = useConfig(state => state.setJson);
+    const [url, setURL] = React.useState("");
+    const [jsonFile, setJsonFile] = React.useState<string | null>(null);
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) setJsonFile(e.target.files?.item(0));
-  };
-
-  const handleImportFile = () => {
-    if (url) {
-      setJsonFile(null);
-
-      toast.loading("加载中...", { id: "toastFetch" });
-      return fetch(url)
-        .then(res => res.json())
-        .then(json => {
-          setJson(JSON.stringify(json));
-          setVisible(false);
-        })
-        .catch(() => toast.error("JSON读取失败!"))
-        .finally(() => toast.dismiss("toastFetch"));
+    const state = {
+        bool: true,
     }
+    const handleFileChange = () => {
+        if (state.bool) {
+            state.bool = false;
+            let files = utools.showOpenDialog({
+                filters: [{'name': 'Json', extensions: ['json', "txt"]}],
+                properties: ['openFile'],
+                buttonLabel: "导入",
+                message: "选择json文件"
+            });
+            if (files) setJsonFile(files[0]);
+            state.bool = true;
+        }
+    };
 
-    if (jsonFile) {
-      const reader = new FileReader();
+    const handleImportFile = () => {
+        if (url) {
+            setJsonFile(null);
 
-      reader.readAsText(jsonFile, "UTF-8");
-      reader.onload = function (data) {
-        setJson(data.target?.result as string);
-        setVisible(false);
-      };
-    }
-  };
+            toast.loading("加载中...", {id: "toastFetch"});
+            return fetch(url)
+                .then(res => res.json())
+                .then(json => {
+                    setJson(JSON.stringify(json));
+                    setVisible(false);
+                }).catch(() => toast.error("JSON读取失败!"))
+                .finally(() => toast.dismiss("toastFetch"));
+        }
 
-  return (
-    <Modal visible={visible} setVisible={setVisible}>
-      <Modal.Header>添加JSON</Modal.Header>
-      <StyledModalContent>
-        <Input
-          value={url}
-          onChange={e => setURL(e.target.value)}
-          type="url"
-          placeholder="URL或JSON"
-        />
-        <StyledUploadWrapper>
-          <input
-            key={jsonFile?.name}
-            onChange={handleFileChange}
-            type="file"
-            accept="application/JSON"
-          />
-          <AiOutlineUpload size={46} />
-          <StyledUploadMessage>点击上传文件</StyledUploadMessage>
-          <StyledFileName>{jsonFile?.name ?? "空"}</StyledFileName>
-        </StyledUploadWrapper>
-      </StyledModalContent>
-      <Modal.Controls setVisible={setVisible}>
-        <Button
-          status="SECONDARY"
-          onClick={handleImportFile}
-          disabled={!(jsonFile || url)}
-        >
-          导入
-        </Button>
-      </Modal.Controls>
-    </Modal>
-  );
+        if (jsonFile) {
+            window.readFileAsText(jsonFile).then((data) => {
+                setJson(data as string);
+                setVisible(false);
+            }).catch((error) => {
+                console.error(error);
+            });
+        }
+    };
+
+    return (
+        <Modal visible={visible} setVisible={setVisible}>
+            <Modal.Header>添加JSON</Modal.Header>
+            <StyledModalContent>
+                <Input
+                    value={url}
+                    onChange={e => setURL(e.target.value)}
+                    type="url"
+                    placeholder="URL或JSON"
+                />
+                <StyledUploadWrapper onClick={handleFileChange}>
+                    <AiOutlineUpload size={46}/>
+                    <StyledUploadMessage>点击上传文件</StyledUploadMessage>
+                    <StyledFileName>{jsonFile ?? "无文件"}</StyledFileName>
+                </StyledUploadWrapper>
+            </StyledModalContent>
+            <Modal.Controls setVisible={setVisible}>
+                <Button
+                    status="SECONDARY"
+                    onClick={handleImportFile}
+                    disabled={!(jsonFile || url)}
+                >
+                    导入
+                </Button>
+            </Modal.Controls>
+        </Modal>
+    );
 };
