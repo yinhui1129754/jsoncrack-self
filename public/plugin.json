@@ -5,11 +5,11 @@
   "features": [
     {
       "code": "editor",
-      "explain": "编辑JSON导图",
-      "cmds":["json", "json导图", "思维导图","j导图",
+      "explain": "JSON导图 - 一个将JSON变成思维导图的编辑器(json/思维导图/json导图)",
+      "cmds":["json", "json导图", "思维导图", "json图形", "json编辑器",
         {
           "type": "regex",
-          "label": "json思维导图",
+          "label": "json导图",
           "match": "/^[\\{\\[](.|\\n)*[\\}\\]]$/",
           "minLength": 5
         }
