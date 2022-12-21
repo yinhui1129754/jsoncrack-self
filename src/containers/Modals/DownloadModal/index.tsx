@@ -57,18 +57,23 @@ const downloadImgState = {
 function downloadImg(blob: Blob, name: string) {
     if (downloadImgState.bool) {
         downloadImgState.bool = false;
-        let path = utools.showSaveDialog({
-            title: '保存位置',
-            defaultPath: utools.getPath('downloads') + "/" + name,
-            buttonLabel: '保存',
-            properties: ['createDirectory']
-        }) as string;
-        window.savaImageToFile(path, blob).then(() => {
+        try {
+            let path = utools.showSaveDialog({
+                title: '保存位置',
+                defaultPath: utools.getPath('downloads') + "/" + name,
+                buttonLabel: '保存',
+                properties: ['createDirectory']
+            }) as string;
+            if(path) {
+                window.savaImageToFile(path, blob).then(() => {
+                    toast.success("保存完成");
+                }).catch((e) => {
+                    throw new Error(e);
+                });
+            }
+        } catch (e){
             downloadImgState.bool = true;
-            toast.success("保存完成");
-        }).catch((e) => {
-            throw new Error(e);
-        });
+        }
     }
 }
 

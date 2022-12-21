@@ -106,17 +106,17 @@ const StyledTopWrapper = styled.nav`
   }
 `;
 
-const StyledBottomWrapper = styled.nav`
-  display: flex;
-  justify-content: space-between;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-
-  @media only screen and (max-width: 768px) {
-    display: none;
-  }
-`;
+// const StyledBottomWrapper = styled.nav`
+//   display: flex;
+//   justify-content: space-between;
+//   flex-direction: column;
+//   align-items: center;
+//   width: 100%;
+//
+//   @media only screen and (max-width: 768px) {
+//     display: none;
+//   }
+// `;
 
 const StyledLogo = styled.a`
   color: ${({theme}) => theme.FULL_WHITE};
@@ -138,7 +138,7 @@ function rotateLayout(direction: "LEFT" | "RIGHT" | "DOWN" | "UP") {
 export const Sidebar: React.FC = () => {
     const [uploadVisible, setUploadVisible] = React.useState(false);
     const [clearVisible, setClearVisible] = React.useState(false);
-    const [shareVisible, setShareVisible] = React.useState(false);
+    // const [shareVisible, setShareVisible] = React.useState(false);
     const [isDownloadVisible, setDownloadVisible] = React.useState(false);
 
     const getJson = useConfig(state => state.getJson);
@@ -157,26 +157,30 @@ export const Sidebar: React.FC = () => {
         state => [state.foldNodes, state.hideEditor],
         shallow
     );
-    const state = {
+    const downloadJson = {
         bool:true,
     }
     const handleSave = () => {
-        if(state.bool) {
-            state.bool = false;
-            let path = utools.showSaveDialog({
-                title: '保存位置',
-                defaultPath: utools.getPath('downloads')+"/json导图.json",
-                buttonLabel: '保存',
-                properties: ['createDirectory']
-            }) as string;
-            window.saveTextToFile(path, getJson()).then(() => {
-                state.bool = true;
-                toast.success("保存完成");
-            }).catch((e) => {
-                console.error(e);
-                state.bool = true;
-                toast.error(e.message);
-            });
+        if(downloadJson.bool) {
+            downloadJson.bool = false;
+            try {
+                let path = utools.showSaveDialog({
+                    title: '保存位置',
+                    defaultPath: utools.getPath('downloads') + "/json导图.json",
+                    buttonLabel: '保存',
+                    properties: ['createDirectory']
+                }) as string;
+                if (path) {
+                    window.saveTextToFile(path, getJson()).then(() => {
+                        toast.success("保存完成");
+                    }).catch((e) => {
+                        console.error(e);
+                        toast.error(e.message);
+                    });
+                }
+            }catch (e){
+                downloadJson.bool = true;
+            }
         }
     };
 

@@ -43,20 +43,24 @@ export const ImportModal: React.FC<ModalProps> = ({visible, setVisible}) => {
     const [url, setURL] = React.useState("");
     const [jsonFile, setJsonFile] = React.useState<string | null>(null);
 
-    const state = {
+    const selectFileState = {
         bool: true,
     }
-    const handleFileChange = () => {
-        if (state.bool) {
-            state.bool = false;
-            let files = utools.showOpenDialog({
-                filters: [{'name': 'Json', extensions: ['json', "txt"]}],
-                properties: ['openFile'],
-                buttonLabel: "导入",
-                message: "选择json文件"
-            });
-            if (files) setJsonFile(files[0]);
-            state.bool = true;
+    const handleSelectFile = () => {
+        if (selectFileState.bool) {
+            selectFileState.bool = false;
+            try {
+                let files = utools.showOpenDialog({
+                    filters: [{'name': 'Json', extensions: ['json', "txt"]}],
+                    properties: ['openFile'],
+                    buttonLabel: "导入",
+                    message: "选择json文件"
+                });
+                if (files) setJsonFile(files[0]);
+            }catch (e){
+                selectFileState.bool = true;
+                toast.error("导入Json失败")
+            }
         }
     };
 
@@ -94,7 +98,7 @@ export const ImportModal: React.FC<ModalProps> = ({visible, setVisible}) => {
                     type="url"
                     placeholder="URL或JSON"
                 />
-                <StyledUploadWrapper onClick={handleFileChange}>
+                <StyledUploadWrapper onClick={handleSelectFile}>
                     <AiOutlineUpload size={46}/>
                     <StyledUploadMessage>点击上传文件</StyledUploadMessage>
                     <StyledFileName>{jsonFile ?? "无文件"}</StyledFileName>
