@@ -1,5 +1,4 @@
 import React from "react";
-import Head from "next/head";
 import { Sidebar } from "src/components/Sidebar";
 import Panes from "src/containers/Editor/Panes";
 import styled from "styled-components";
@@ -26,13 +25,6 @@ export const StyledEditorWrapper = styled.div`
 const EditorPage: React.FC = () => {
   return (
     <StyledEditorWrapper>
-      <Head>
-        <title>编辑 | JSON 导图</title>
-        <meta
-          name="description"
-          content="立即以图表形式查看JSON数据。"
-        />
-      </Head>
       <StyledPageWrapper>
         <Sidebar />
         <StyledEditorWrapper>
