@@ -1,16 +1,11 @@
 {
-  "name": "json-crack",
+  "name": "jsoncrack-for-utools",
   "private": true,
   "version": "v2.2.0",
-  "author": "https://github.com/AykutSarac",
-  "homepage": "https://jsoncrack.com",
+  "author": "Trifolium",
+  "homepage": "https://github.com/trifolium-wang/jsoncrack-for-utools",
   "scripts": {
-    "dev": "next dev",
-    "build": "next build && next export",
-    "start": "next start",
-    "lint": "next lint",
-    "lint:fix": "prettier --write \"./**/*.{ts,tsx,json}\"",
-    "deploy": "gh-pages -d out -t true"
+    "build": "next build && next export && cp plugin.json preload.js ./out"
   },
   "dependencies": {
     "@monaco-editor/react": "^4.4.6",

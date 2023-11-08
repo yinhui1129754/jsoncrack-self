@@ -1,0 +1,27 @@
+{
+  "main": "editor.html",
+  "preload": "preload.js",
+  "logo": "assets/192.png",
+  "features": [
+    {
+      "code": "editor",
+      "explain": "JSON导图 - 一个将JSON变成思维导图的编辑器(json|思维导图|json导图)",
+      "cmds":["json", "json导图", "思维导图", "json图形",
+        {
+          "type": "regex",
+          "label": "json导图",
+          "match": "/^[\\{\\[](.|\\n)*[\\}\\]]$/",
+          "minLength": 5
+        },
+        {
+          "type": "files",
+          "label": "json导图",
+          "fileType": "file",
+          "match": "/\\.json$/i",
+          "minLength": 1,
+          "maxLength": 1
+        }
+      ]
+    }
+  ]
+}
