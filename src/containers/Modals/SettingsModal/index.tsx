@@ -52,7 +52,7 @@ export const SettingsModal: React.FC<{
           </StyledToggle>
           <StyledToggle
             onChange={() => setLightTheme(!lightmode)}
-            checked={lightmode}
+            checked={!lightmode}
           >启用夜间模式
           </StyledToggle>
           <span>节点值最大长度
