@@ -4,12 +4,12 @@ import Toggle from "src/components/Toggle";
 import useStored from "src/store/useStored";
 import styled from "styled-components";
 import shallow from "zustand/shallow";
+import { Slider } from 'antd';
 
 const StyledToggle = styled(Toggle)`
   flex-flow: row-reverse;
   background: black;
 `;
-
 const StyledModalWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -31,6 +31,11 @@ export const SettingsModal: React.FC<{
     shallow
   );
 
+  const [nodeMaxLength, setNodeMaxLength] = useStored(
+      state => [state.nodeMaxLength, state.setNodeMaxLength]
+  );
+
+
   return (
     <Modal visible={visible} setVisible={setVisible}>
       <Modal.Header>设置</Modal.Header>
@@ -48,9 +53,17 @@ export const SettingsModal: React.FC<{
           <StyledToggle
             onChange={() => setLightTheme(!lightmode)}
             checked={lightmode}
-          >
-            启用白天模式
+          >启用夜间模式
           </StyledToggle>
+          <span>节点值最大长度
+            <Slider
+                step={1}
+                max={200}
+                min = {1}
+                defaultValue={nodeMaxLength}
+                tooltip={{ open: true }}
+                onChange={(v) => setNodeMaxLength(v)} />
+          </span>
         </StyledModalWrapper>
       </Modal.Content>
       <Modal.Controls setVisible={setVisible} />

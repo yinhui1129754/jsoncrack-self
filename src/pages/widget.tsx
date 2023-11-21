@@ -8,6 +8,7 @@ import { NodeModal } from "src/containers/Modals/NodeModal";
 import useGraph from "src/store/useGraph";
 import { parser } from "src/utils/jsonParser";
 import styled, { ThemeProvider } from "styled-components";
+import useStored from "../store/useStored";
 
 const Graph = dynamic<any>(() => import("src/components/Graph").then(c => c.Graph), {
   ssr: false,
@@ -69,7 +70,7 @@ const WidgetPage = () => {
   const collapsedEdges = useGraph(state => state.collapsedEdges);
   const loading = useGraph(state => state.loading);
   const setGraphValue = useGraph(state => state.setGraphValue);
-
+  const nodeMaxLength = useStored(state => state.nodeMaxLength);
   const openModal = React.useCallback(() => setModalVisible(true), []);
 
   React.useEffect(() => {
@@ -95,10 +96,10 @@ const WidgetPage = () => {
       try {
         if (!event.data?.json) return;
 
-        const { nodes, edges } = parser(event.data.json);
+        const { nodes, edges } = parser(event.data.json,false,nodeMaxLength);
 
         const options = {
-          direction: "RIGHT",
+          direction: "又",
           theme,
           ...event.data.options,
         };
@@ -111,7 +112,7 @@ const WidgetPage = () => {
         setGraphValue("edges", edges);
       } catch (error) {
         console.error(error);
-        toast.error("Invalid JSON!");
+        toast.error("非法JSON!");
       }
     };
 

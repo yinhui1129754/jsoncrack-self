@@ -11,6 +11,7 @@
     "@monaco-editor/react": "^4.4.6",
     "@sentry/nextjs": "^7.16.0",
     "allotment": "^1.17.0",
+    "antd": "^5.11.2",
     "compress-json": "^2.1.2",
     "html-to-image": "^1.10.8",
     "jsonc-parser": "^3.2.0",
