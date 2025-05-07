@@ -20,6 +20,10 @@ interface NodeData<T = any> {
   className?: string;
   layoutOptions?: ElkNodeLayoutOptions;
   selectionDisabled?: boolean;
+  jsonData?: any
+  parentData?: any
+  key?: any
+  type?: any
 }
 
 interface EdgeData<T = any> {

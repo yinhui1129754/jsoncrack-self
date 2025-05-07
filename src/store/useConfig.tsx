@@ -9,10 +9,13 @@ interface ConfigActions {
   zoomIn: () => void;
   zoomOut: () => void;
   centerView: () => void;
+  getJsonObj: () => any;
+  setJsonObj: (jsonObj: any) => any;
 }
 
 const initialStates = {
   json: defaultJson,
+  jsonObj: {},
   cursorMode: "move" as "move" | "navigation",
   foldNodes: false,
   hideEditor: false,
@@ -27,6 +30,10 @@ const useConfig = create<Config & ConfigActions>()((set, get) => ({
   ...initialStates,
   getJson: () => get().json,
   setJson: (json: string) => set({ json }),
+  getJsonObj: () => get().jsonObj,
+  setJsonObj: (jsonObj) => {
+    return set({ jsonObj: jsonObj })
+  },
   zoomIn: () => {
     const zoomPanPinch = get().zoomPanPinch;
     if (zoomPanPinch) {

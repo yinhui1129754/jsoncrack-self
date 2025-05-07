@@ -63,7 +63,7 @@ const WidgetPage = () => {
   const { query, push } = useRouter();
 
   const [isModalVisible, setModalVisible] = React.useState(false);
-  const [selectedNode, setSelectedNode] = React.useState<[string, string][]>([]);
+  const [selectedNode, setSelectedNode] = React.useState<NodeData>(null as unknown as NodeData);
   const [theme, setTheme] = React.useState("dark");
 
   const collapsedNodes = useGraph(state => state.collapsedNodes);
@@ -96,7 +96,7 @@ const WidgetPage = () => {
       try {
         if (!event.data?.json) return;
 
-        const { nodes, edges } = parser(event.data.json,false,nodeMaxLength);
+        const { nodes, edges } = parser(event.data.json, false, nodeMaxLength);
 
         const options = {
           direction: "又",
@@ -122,7 +122,7 @@ const WidgetPage = () => {
 
   if (query.json)
     return (
-        <br />
+      <br />
     );
 
   return (

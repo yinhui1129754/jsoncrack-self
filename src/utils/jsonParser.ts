@@ -1,10 +1,10 @@
-import {Node, parseTree} from "jsonc-parser";
+import { Node, parseTree } from "jsonc-parser";
 
 const calculateSize = (
     text: string | [string, string][],
     isParent = false,
     isFolded: boolean,
-    nodeMaxLength:number
+    nodeMaxLength: number
 ) => {
     let value = "";
 
@@ -36,12 +36,11 @@ const calculateSize = (
     };
 };
 
-export const parser = (jsonStr: string, isFolded = false, nodeMaxLength: number) => {
+export const parser2 = (jsonStr: string, isFolded = false, nodeMaxLength: number) => {
     try {
         let json = parseTree(jsonStr);
         let nodes: NodeData[] = [];
         let edges: EdgeData[] = [];
-
         const addNodes = (
             text: any,
             width: number,
@@ -98,7 +97,7 @@ export const parser = (jsonStr: string, isFolded = false, nodeMaxLength: number)
             myParentId?: string,
             nextType?: string
         ) => {
-            let {type, children, value} = objectToTraverse;
+            let { type, children, value } = objectToTraverse;
 
             if (!children) {
                 if (value !== undefined) {
@@ -115,9 +114,10 @@ export const parser = (jsonStr: string, isFolded = false, nodeMaxLength: number)
                             brotherKey = value;
                         }
                     } else if (parentType === "array") {
-                        const {width, height} = calculateSize(String(value), false, isFolded
-                            ,nodeMaxLength);
+                        const { width, height } = calculateSize(String(value), false, isFolded
+                            , nodeMaxLength);
                         const nodeFromArrayId = addNodes(String(value), width, height, false);
+                        (nodes[nodes.length - 1] as any).value = value
                         if (myParentId) {
                             addEdges(myParentId, nodeFromArrayId);
                         }
@@ -149,10 +149,10 @@ export const parser = (jsonStr: string, isFolded = false, nodeMaxLength: number)
                             if (ModifyNodes[findNode]) {
                                 ModifyNodes[findNode].text =
                                     ModifyNodes[findNode].text.concat(brothersNode);
-                                const {width, height} = calculateSize(
+                                const { width, height } = calculateSize(
                                     ModifyNodes[findNode].text,
                                     false,
-                                    isFolded,nodeMaxLength
+                                    isFolded, nodeMaxLength
                                 );
                                 ModifyNodes[findNode].width = width;
                                 ModifyNodes[findNode].height = height;
@@ -160,8 +160,8 @@ export const parser = (jsonStr: string, isFolded = false, nodeMaxLength: number)
                                 brothersNode = [];
                             }
                         } else {
-                            const {width, height} = calculateSize(brothersNode, false,
-                                isFolded,nodeMaxLength);
+                            const { width, height } = calculateSize(brothersNode, false,
+                                isFolded, nodeMaxLength);
                             const brothersNodeId = addNodes(brothersNode, width, height, false);
                             brothersNode = [];
 
@@ -183,10 +183,10 @@ export const parser = (jsonStr: string, isFolded = false, nodeMaxLength: number)
                     }
 
                     // add parent node
-                    const {width, height} = calculateSize(parentName, true, isFolded
-                    ,nodeMaxLength);
+                    const { width, height } = calculateSize(parentName, true, isFolded
+                        , nodeMaxLength);
                     parentId = addNodes(parentName, width, height, type);
-                    bracketOpen = [...bracketOpen, {id: parentId, type: type}];
+                    bracketOpen = [...bracketOpen, { id: parentId, type: type }];
                     parentName = "";
 
                     // add edges from parent node
@@ -249,10 +249,10 @@ export const parser = (jsonStr: string, isFolded = false, nodeMaxLength: number)
                             if (ModifyNodes[findNode]) {
                                 ModifyNodes[findNode].text =
                                     ModifyNodes[findNode].text.concat(brothersNode);
-                                const {width, height} = calculateSize(
+                                const { width, height } = calculateSize(
                                     ModifyNodes[findNode].text,
                                     false,
-                                    isFolded,nodeMaxLength
+                                    isFolded, nodeMaxLength
                                 );
                                 ModifyNodes[findNode].width = width;
                                 ModifyNodes[findNode].height = height;
@@ -260,8 +260,8 @@ export const parser = (jsonStr: string, isFolded = false, nodeMaxLength: number)
                                 brothersNode = [];
                             }
                         } else {
-                            const {width, height} = calculateSize(brothersNode, false,
-                                isFolded,nodeMaxLength);
+                            const { width, height } = calculateSize(brothersNode, false,
+                                isFolded, nodeMaxLength);
                             const brothersNodeId = addNodes(brothersNode, width, height, false);
                             brothersNode = [];
 
@@ -317,7 +317,7 @@ export const parser = (jsonStr: string, isFolded = false, nodeMaxLength: number)
             if (notHaveParent.length > 1) {
                 if (json.type !== "array") {
                     const text = "";
-                    const {width, height} = calculateSize(text, false, isFolded,nodeMaxLength);
+                    const { width, height } = calculateSize(text, false, isFolded, nodeMaxLength);
                     const emptyId = addNodes(text, width, height, false, true);
                     notHaveParent.forEach(children => {
                         addEdges(emptyId, children);
@@ -328,17 +328,17 @@ export const parser = (jsonStr: string, isFolded = false, nodeMaxLength: number)
             if (nodes.length === 0) {
                 if (json.type === "array") {
                     const text = "[]";
-                    const {width, height} = calculateSize(text, false, isFolded,nodeMaxLength);
+                    const { width, height } = calculateSize(text, false, isFolded, nodeMaxLength);
                     addNodes(text, width, height, false);
                 } else {
                     const text = "{}";
-                    const {width, height} = calculateSize(text, false, isFolded,nodeMaxLength);
+                    const { width, height } = calculateSize(text, false, isFolded, nodeMaxLength);
                     addNodes(text, width, height, false);
                 }
             }
         }
 
-        return {nodes, edges};
+        return { nodes, edges };
     } catch (error) {
         console.error(error);
         return {
@@ -347,3 +347,113 @@ export const parser = (jsonStr: string, isFolded = false, nodeMaxLength: number)
         };
     }
 };
+
+
+export const parser = (jsonStr: string, isFolded = false, nodeMaxLength: number) => {
+    let json = JSON.parse(jsonStr);
+    let nodes: NodeData[] = [];
+    let edges: EdgeData[] = [];
+
+    const addNodes = (
+        text: any,
+        parent: "string" | "number" | "boolean" | "object" | "array" | "null" | false,
+        isParent = false,
+        isEmpty?: boolean,
+        jsonData?: any,
+        parentData?: any,
+        key?: any
+    ) => {
+        let actualId = String(nodes.length + 1);
+        const { width, height } = calculateSize(text, isParent, isFolded, nodeMaxLength);
+        nodes = [
+            ...nodes,
+            {
+                id: actualId,
+                text: text,
+                width: width,
+                height: height,
+                jsonData: jsonData,
+                type: (Array.isArray(jsonData) ? "array" : typeof jsonData),
+                parentData: parentData,
+                key: key,
+                data: {
+                    parent: parent === "array" || parent === "object" ? parent : false,
+                    childrenCount: parent ? 1 : 0,
+                    isEmpty: isEmpty,
+                },
+            },
+        ];
+        return actualId;
+    };
+
+
+    const addEdges = (from: string, to: string) => {
+        edges = [
+            ...edges,
+            {
+                id: `e${from}-${to}`,
+                from: from,
+                to: to,
+            },
+        ];
+    };
+
+
+
+    const addObj = function (obj, parentData?: any, key?: any, edgesId?: any) {
+        var hasParent: any = ""
+        if (Array.isArray(parentData)) {
+            hasParent = "array"
+        } else {
+            hasParent = typeof parentData as any
+        }
+        if (obj && (Array.isArray(obj) || typeof obj === "object")) {
+            var arr: any = []
+            var noKeys: any = []
+            for (var i in obj) {
+                if (obj[i] && (Array.isArray(obj[i]) || typeof obj[i] === "object")) {
+                    noKeys.push([i, obj[i]])
+                } else {
+                    arr.push([String(i), obj[i], i, obj[i]])
+                }
+            }
+            var text: any = []
+            for (var i in arr) {
+                text.push([arr[i][0], arr[i][1]])
+            }
+            var id = addNodes(text, hasParent, false, false, obj, parentData, key)
+            if (edgesId) {
+                addEdges(edgesId, id)
+            }
+            for (var i in noKeys) {
+                var id2 = addNodes(noKeys[i][0], hasParent, true, false, obj, parentData, key)
+                if (edgesId) {
+                    addEdges(edgesId, id2)
+                } else if (id) {
+                    addEdges(id, id2)
+
+                }
+                // addObj(noKeys[i][0], obj, noKeys[i][0], id)
+                addObj(noKeys[i][1], obj, noKeys[i][0], id2)
+            }
+
+        } else {
+            var id = addNodes(obj, hasParent, false, false, obj, parentData, key)
+
+            if (edgesId) {
+                addEdges(edgesId, id)
+            }
+        }
+    }
+
+    if (Array.isArray(json)) {
+        addObj(json)
+    } else {
+        addObj(json)
+    }
+    return {
+        nodes, edges,
+        jsonObj: json
+    }
+
+}

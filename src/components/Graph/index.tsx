@@ -15,7 +15,7 @@ import { ErrorView } from "./ErrorView";
 interface GraphProps {
   isWidget?: boolean;
   openModal: () => void;
-  setSelectedNode: (node: [string, string][]) => void;
+  setSelectedNode: (node: NodeData) => void;
 }
 
 const StyledEditorWrapper = styled.div<{ isWidget: boolean }>`
@@ -40,7 +40,6 @@ const StyledEditorWrapper = styled.div<{ isWidget: boolean }>`
     fill: ${({ theme }) => theme.BACKGROUND_NODE};
   }
 `;
-
 const GraphComponent = ({
   isWidget = false,
   openModal,
@@ -62,7 +61,7 @@ const GraphComponent = ({
 
   const handleNodeClick = React.useCallback(
     (e: React.MouseEvent<SVGElement>, data: NodeData) => {
-      if (setSelectedNode) setSelectedNode(data.text);
+      if (setSelectedNode) setSelectedNode(data);
       if (openModal) openModal();
     },
     [openModal, setSelectedNode]
@@ -127,8 +126,7 @@ const GraphComponent = ({
     if (input) input.blur();
   }, []);
 
-  if (nodes.length > 8_000) return <ErrorView />;
-
+  if (nodes.length > 8_0000) return <ErrorView />;
   return (
     <StyledEditorWrapper isWidget={isWidget} onContextMenu={e => e.preventDefault()}>
       {loading && <Loading message="加载图形...." />}
