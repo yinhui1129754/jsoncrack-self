@@ -35,9 +35,4 @@ export const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
 //   ],
 // });
 export const defaultJson = JSON.stringify({
-    "ddd": {
-        "ccc": {
-            "eee": "asd"
-        }
-    }
 }, null, 2);

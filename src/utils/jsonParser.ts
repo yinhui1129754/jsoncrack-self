@@ -460,11 +460,12 @@ export const parser = (jsonStr: string, isFolded = false, nodeMaxLength: number)
             addNodes(text, false, false, false, json);
         } else {
             const text = "{}";
-
             addNodes(text, false, false, false, json);
         }
-    }
+    } else {
 
+    }
+    console.log(nodes)
     return {
         nodes, edges,
         jsonObj: json
