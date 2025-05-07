@@ -35,17 +35,9 @@ export const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
 //   ],
 // });
 export const defaultJson = JSON.stringify({
-    "aaa": 10,
-    "ddd": [
-        1,
-        2,
-        3,
-        {
-            "asd": "阿斯顿",
-            "asaa挨打": [
-                1
-            ]
+    "ddd": {
+        "ccc": {
+            "eee": "asd"
         }
-    ],
-    "ccc": 20
+    }
 }, null, 2);

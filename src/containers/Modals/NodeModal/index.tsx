@@ -104,7 +104,7 @@ export const NodeModal = ({ selectedNode, visible, closeModal }: NodeModalProps)
         toast.success("内容修改成功!")
         closeModal();
       }
-      setJson(JSON.stringify(rootJson))
+      setJson(JSON.stringify(rootJson, null, 2))
 
     } catch {
 

@@ -41,7 +41,7 @@ const StyledUploadMessage = styled.h3`
 export const ImportModal: React.FC<ModalProps> = ({ visible, setVisible }) => {
     const setJson = useConfig(state => state.setJson);
     const [url, setURL] = React.useState("");
-    const [jsonFile, setJsonFile] = React.useState<string | null>(null);
+    const [jsonFile, setJsonFile] = React.useState<Blob | null>(null);
 
     const selectFileState = {
         bool: true,
@@ -50,7 +50,16 @@ export const ImportModal: React.FC<ModalProps> = ({ visible, setVisible }) => {
         if (selectFileState.bool) {
             selectFileState.bool = false;
             try {
-
+                const input = document.createElement("input");
+                input.type = "file";
+                input.accept = ".json";
+                input.addEventListener("change", (e) => {
+                    if (input.files && input.files[0]) {
+                        setJsonFile(input.files[0]);
+                        handleImportFile();
+                    }
+                });
+                input.click();
             } catch (e) {
                 selectFileState.bool = true;
                 toast.error("导入Json失败")
@@ -73,12 +82,23 @@ export const ImportModal: React.FC<ModalProps> = ({ visible, setVisible }) => {
         }
 
         if (jsonFile) {
-            window.readFileAsText(jsonFile).then((data) => {
-                setJson(data as string);
-                setVisible(false);
-            }).catch((error) => {
-                console.error(error);
-            });
+            var reader = new FileReader()
+            reader.readAsText(jsonFile, "UTF-8")
+            reader.onload = () => {
+                try {
+                    setJson(reader.result as string);
+                    setVisible(false);
+                } catch (e) {
+                    toast.error("JSON读取失败!");
+                }
+                selectFileState.bool = true;
+            }
+            // window.readFileAsText(jsonFile).then((data) => {
+            //     setJson(data as string);
+            //     setVisible(false);
+            // }).catch((error) => {
+            //     console.error(error);
+            // });
         }
     };
 
@@ -95,7 +115,7 @@ export const ImportModal: React.FC<ModalProps> = ({ visible, setVisible }) => {
                 <StyledUploadWrapper onClick={handleSelectFile}>
                     <AiOutlineUpload size={46} />
                     <StyledUploadMessage>点击上传文件</StyledUploadMessage>
-                    <StyledFileName>{jsonFile ?? "无文件"}</StyledFileName>
+                    {/* <StyledFileName>{jsonFile ?? "无文件"}</StyledFileName> */}
                 </StyledUploadWrapper>
             </StyledModalContent>
             <Modal.Controls setVisible={setVisible}>

@@ -421,10 +421,16 @@ export const parser = (jsonStr: string, isFolded = false, nodeMaxLength: number)
             for (var i in arr) {
                 text.push([arr[i][0], arr[i][1]])
             }
-            var id = addNodes(text, hasParent, false, false, obj, parentData, key)
-            if (edgesId) {
-                addEdges(edgesId, id)
+            var id = ""
+            if (text.length) {
+                id = addNodes(text, hasParent, false, false, obj, parentData, key)
+                if (edgesId) {
+                    addEdges(edgesId, id)
+                }
             }
+
+
+
             for (var i in noKeys) {
                 var id2 = addNodes(noKeys[i][0], hasParent, true, false, obj, parentData, key)
                 if (edgesId) {
@@ -438,6 +444,7 @@ export const parser = (jsonStr: string, isFolded = false, nodeMaxLength: number)
             }
 
         } else {
+
             var id = addNodes(obj, hasParent, false, false, obj, parentData, key)
 
             if (edgesId) {
@@ -446,11 +453,18 @@ export const parser = (jsonStr: string, isFolded = false, nodeMaxLength: number)
         }
     }
 
-    if (Array.isArray(json)) {
-        addObj(json)
-    } else {
-        addObj(json)
+    addObj(json)
+    if (!nodes.length) {
+        if (Array.isArray(json)) {
+            const text = "[]";
+            addNodes(text, false, false, false, json);
+        } else {
+            const text = "{}";
+
+            addNodes(text, false, false, false, json);
+        }
     }
+
     return {
         nodes, edges,
         jsonObj: json
