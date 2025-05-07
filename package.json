@@ -5,7 +5,8 @@
   "author": "Trifolium",
   "homepage": "https://github.com/trifolium-wang/jsoncrack-for-utools",
   "scripts": {
-    "build": "next build && next export && cp plugin.json preload.js ./out"
+    "build": "next build && next export",
+    "dev": "next dev"
   },
   "dependencies": {
     "@monaco-editor/react": "^4.4.6",

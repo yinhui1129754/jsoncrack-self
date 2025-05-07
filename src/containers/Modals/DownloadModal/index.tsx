@@ -1,12 +1,12 @@
 import React from "react";
-import {toBlob, toPng} from "html-to-image";
-import {TwitterPicker} from "react-color";
-import {TwitterPickerStylesProps} from "react-color/lib/components/twitter/Twitter";
+import { toBlob, toPng } from "html-to-image";
+import { TwitterPicker } from "react-color";
+import { TwitterPickerStylesProps } from "react-color/lib/components/twitter/Twitter";
 import toast from "react-hot-toast";
-import {FiCopy, FiDownload} from "react-icons/fi";
-import {Button} from "src/components/Button";
-import {Input} from "src/components/Input";
-import {Modal, ModalProps} from "src/components/Modal";
+import { FiCopy, FiDownload } from "react-icons/fi";
+import { Button } from "src/components/Button";
+import { Input } from "src/components/Input";
+import { Modal, ModalProps } from "src/components/Modal";
 import useConfig from "src/store/useConfig";
 import styled from "styled-components";
 
@@ -58,20 +58,20 @@ function downloadImg(blob: Blob, name: string) {
     if (downloadImgState.bool) {
         downloadImgState.bool = false;
         try {
-            let path = utools.showSaveDialog({
-                title: '保存位置',
-                defaultPath: utools.getPath('downloads') + "/" + name,
-                buttonLabel: '保存',
-                properties: ['createDirectory']
-            }) as string;
-            if(path) {
-                window.savaImageToFile(path, blob).then(() => {
-                    toast.success("保存完成");
-                }).catch((e) => {
-                    throw new Error(e);
-                });
-            }
-        } catch (e){
+            // let path = utools.showSaveDialog({
+            //     title: '保存位置',
+            //     defaultPath: utools.getPath('downloads') + "/" + name,
+            //     buttonLabel: '保存',
+            //     properties: ['createDirectory']
+            // }) as string;
+            // if(path) {
+            //     window.savaImageToFile(path, blob).then(() => {
+            //         toast.success("保存完成");
+            //     }).catch((e) => {
+            //         throw new Error(e);
+            //     });
+            // }
+        } catch (e) {
             downloadImgState.bool = true;
         }
     }
@@ -82,12 +82,12 @@ const StyledContainer = styled.div`
   flex-direction: column;
   gap: 16px;
   padding: 12px 0;
-  border-top: 1px solid ${({theme}) => theme.BACKGROUND_MODIFIER_ACCENT};
+  border-top: 1px solid ${({ theme }) => theme.BACKGROUND_MODIFIER_ACCENT};
   font-size: 12px;
   line-height: 16px;
   font-weight: 600;
   text-transform: uppercase;
-  color: ${({theme}) => theme.INTERACTIVE_NORMAL};
+  color: ${({ theme }) => theme.INTERACTIVE_NORMAL};
 
   &:first-of-type {
     padding-top: 0;
@@ -105,12 +105,12 @@ const StyledColorIndicator = styled.div<{ color: string }>`
   width: 100%;
   height: auto;
   border-radius: 6px;
-  background: ${({color}) => color};
+  background: ${({ color }) => color};
   border: 1px solid;
   border-color: rgba(0, 0, 0, 0.1);
 `;
 
-export const DownloadModal: React.FC<ModalProps> = ({visible, setVisible}) => {
+export const DownloadModal: React.FC<ModalProps> = ({ visible, setVisible }) => {
     const setConfig = useConfig(state => state.setConfig);
     const [fileDetails, setFileDetails] = React.useState({
         filename: "json_image",
@@ -120,7 +120,7 @@ export const DownloadModal: React.FC<ModalProps> = ({visible, setVisible}) => {
 
     const clipboardImage = async () => {
         try {
-            toast.loading("复制到剪切板...", {id: "toastClipboard"});
+            toast.loading("复制到剪切板...", { id: "toastClipboard" });
             setConfig("performanceMode", false);
 
             const imageElement = document.querySelector("svg[id*='ref']") as HTMLElement;
@@ -130,7 +130,7 @@ export const DownloadModal: React.FC<ModalProps> = ({visible, setVisible}) => {
                 backgroundColor: fileDetails.backgroundColor,
             });
             if (!imgElement) return;
-            utools.copyImage(imgElement)
+            // utools.copyImage(imgElement)
             toast.success("复制成功");
         } catch (error) {
             toast.error("复制成功失败");
@@ -143,7 +143,7 @@ export const DownloadModal: React.FC<ModalProps> = ({visible, setVisible}) => {
 
     const exportAsImage = async () => {
         try {
-            toast.loading("下载中...", {id: "toastDownload"});
+            toast.loading("下载中...", { id: "toastDownload" });
             setConfig("performanceMode", false);
 
             const imageElement = document.querySelector("svg[id*='ref']") as HTMLElement;
@@ -165,7 +165,7 @@ export const DownloadModal: React.FC<ModalProps> = ({visible, setVisible}) => {
     };
 
     const updateDetails = (key: keyof typeof fileDetails, value: string | number) =>
-        setFileDetails({...fileDetails, [key]: value});
+        setFileDetails({ ...fileDetails, [key]: value });
 
     return (
         <Modal visible={visible} setVisible={setVisible}>
@@ -193,16 +193,16 @@ export const DownloadModal: React.FC<ModalProps> = ({visible, setVisible}) => {
                                 default: ColorPickerStyles,
                             }}
                         />
-                        <StyledColorIndicator color={fileDetails.backgroundColor}/>
+                        <StyledColorIndicator color={fileDetails.backgroundColor} />
                     </StyledColorWrapper>
                 </StyledContainer>
             </Modal.Content>
             <Modal.Controls setVisible={setVisible}>
                 <Button status="SECONDARY" onClick={clipboardImage}>
-                    <FiCopy size={16}/> 复制
+                    <FiCopy size={16} /> 复制
                 </Button>
                 <Button status="SUCCESS" onClick={exportAsImage}>
-                    <FiDownload size={16}/>
+                    <FiDownload size={16} />
                     下载
                 </Button>
             </Modal.Controls>

@@ -1,20 +1,5 @@
 const fs = require('fs')
 
-utools.onPluginEnter(({code, type, payload}) => {
-    if (type === "regex") {
-        utools.dbStorage.setItem("json_crack_payload", payload)
-    }
-    if(type === "files"){
-        let path = payload[0].path;
-        readFileAsText(path).then((data) => {
-            utools.dbStorage.setItem("json_crack_payload", data);
-        }).catch((e) => {
-          console.error(e);
-        })
-    }
-});
-
-
 
 
 
