@@ -5,6 +5,8 @@ import "allotment/dist/style.css";
 import { JsonEditor } from "src/containers/Editor/JsonEditor";
 import useConfig from "src/store/useConfig";
 import styled from "styled-components";
+import useStored from "src/store/useStored";
+import { ListEditor } from "./ListEditor";
 
 export const StyledEditor = styled(Allotment)`
   position: relative !important;
@@ -18,6 +20,7 @@ const LiveEditor = dynamic(() => import("src/containers/Editor/LiveEditor"), {
 
 const Panes: React.FC = () => {
   const hideEditor = useConfig(state => state.hideEditor);
+  const showListMode = useStored(state => state.showListMode)
   const setConfig = useConfig(state => state.setConfig);
   const isMobile = window.innerWidth <= 768;
 
@@ -25,7 +28,13 @@ const Panes: React.FC = () => {
     if (isMobile) setConfig("hideEditor", true);
   }, [isMobile, setConfig]);
 
-  return (
+  return showListMode ? (
+    <StyledEditor proportionalLayout={false} vertical={isMobile}>
+      <Allotment.Pane minSize={0} maxSize={Infinity}>
+        <ListEditor />
+      </Allotment.Pane>
+    </StyledEditor>
+  ) : (
     <StyledEditor proportionalLayout={false} vertical={isMobile}>
       <Allotment.Pane
         preferredSize={isMobile ? "100%" : 400}

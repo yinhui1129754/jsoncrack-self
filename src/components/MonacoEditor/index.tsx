@@ -43,22 +43,29 @@ export const MonacoEditor = ({
     const [value, setValue] = React.useState<string | undefined>("");
     const setJson = useConfig(state => state.setJson);
     const setGraphValue = useGraph(state => state.setGraphValue);
-
+    const setListJson = useConfig(state => state.setListJson)
     const setJsonObj = useConfig(state => state.setJsonObj)
 
     const json = useConfig(state => state.json);
     const foldNodes = useConfig(state => state.foldNodes);
     const lightmode = useStored(state => (state.lightmode ? "light" : "vs-dark"));
     const nodeMaxLength = useStored(state => state.nodeMaxLength);
-
+    const showListMode = useStored(state => state.showListMode)
     React.useEffect(() => {
         try {
-            const { nodes, edges, jsonObj } = parser(json, foldNodes, nodeMaxLength);
 
-            setGraphValue("nodes", nodes);
-            setGraphValue("edges", edges);
+            const { nodes, edges, jsonObj } = parser(json, foldNodes, nodeMaxLength);
             setValue(json);
             setJsonObj(jsonObj)
+            if (showListMode) {
+                setListJson([jsonObj])
+
+                console.log(jsonObj)
+            } else {
+                setGraphValue("nodes", nodes);
+                setGraphValue("edges", edges);
+            }
+
         } catch (e) {
             let msgDiv = document.getElementById("error_message2");
             if (msgDiv != null) {

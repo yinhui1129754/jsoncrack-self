@@ -8,6 +8,7 @@ import { SettingsModal } from "src/containers/Modals/SettingsModal";
 import useConfig from "src/store/useConfig";
 import styled from "styled-components";
 import { DownloadModal } from "../Modals/DownloadModal";
+import useStored from "src/store/useStored";
 
 export const StyledTools = styled.div`
   position: relative;
@@ -51,6 +52,7 @@ export const Tools: React.FC = () => {
   const [settingsVisible, setSettingsVisible] = React.useState(false);
   const [isDownloadVisible, setDownloadVisible] = React.useState(false);
 
+  const showListMode = useStored(state => state.showListMode)
   const hideEditor = useConfig(state => state.hideEditor);
   const setConfig = useConfig(state => state.setConfig);
 
@@ -61,35 +63,55 @@ export const Tools: React.FC = () => {
 
   return (
     <>
-      <StyledTools>
-        <StyledToolElement aria-label="fullscreen" onClick={toggleEditor}>
-          <AiOutlineFullscreen />
-        </StyledToolElement>
-        <StyledToolElement
-          aria-label="settings"
-          onClick={() => setSettingsVisible(true)}
-        >
-          <TbSettings />
-        </StyledToolElement>
-        <SearchInput />
-        <StyledToolElement
-          aria-label="save"
-          onClick={() => setDownloadVisible(true)}
-        >
-          <FiDownload />
-        </StyledToolElement>
-        <StyledToolElement aria-label="center canvas" onClick={centerView}>
-          <MdCenterFocusWeak />
-        </StyledToolElement>
-        <StyledToolElement aria-label="zoom out" onClick={zoomOut}>
-          <AiOutlineMinus />
-        </StyledToolElement>
-        <StyledToolElement aria-label="zoom in" onClick={zoomIn}>
-          <AiOutlinePlus />
-        </StyledToolElement>
-      </StyledTools>
+      {
+        showListMode ? (
+          <StyledTools>
+            <StyledToolElement
+              aria-label="settings"
+              onClick={() => setSettingsVisible(true)}
+            >
+              <TbSettings />
+            </StyledToolElement>
+            <StyledToolElement
+              aria-label="save"
+              onClick={() => setDownloadVisible(true)}
+            >
+              <FiDownload />
+            </StyledToolElement>
+          </StyledTools>
+        ) : (<StyledTools>
+          <StyledToolElement aria-label="fullscreen" onClick={toggleEditor}>
+            <AiOutlineFullscreen />
+          </StyledToolElement>
+          <StyledToolElement
+            aria-label="settings"
+            onClick={() => setSettingsVisible(true)}
+          >
+            <TbSettings />
+          </StyledToolElement>
+          <SearchInput />
+          <StyledToolElement
+            aria-label="save"
+            onClick={() => setDownloadVisible(true)}
+          >
+            <FiDownload />
+          </StyledToolElement>
+          <StyledToolElement aria-label="center canvas" onClick={centerView}>
+            <MdCenterFocusWeak />
+          </StyledToolElement>
+          <StyledToolElement aria-label="zoom out" onClick={zoomOut}>
+            <AiOutlineMinus />
+          </StyledToolElement>
+          <StyledToolElement aria-label="zoom in" onClick={zoomIn}>
+            <AiOutlinePlus />
+          </StyledToolElement>
+        </StyledTools>)
+      }
+
       <DownloadModal visible={isDownloadVisible} setVisible={setDownloadVisible} />
       <SettingsModal visible={settingsVisible} setVisible={setSettingsVisible} />
+
+
     </>
   );
 };

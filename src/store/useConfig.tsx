@@ -11,17 +11,20 @@ interface ConfigActions {
   centerView: () => void;
   getJsonObj: () => any;
   setJsonObj: (jsonObj: any) => any;
+  getListJson: () => any;
+  setListJson: (listJson: any) => any;
 }
 
 const initialStates = {
   json: defaultJson,
   jsonObj: {},
+  listJson: [],
   cursorMode: "move" as "move" | "navigation",
   foldNodes: false,
   hideEditor: false,
   performanceMode: true,
   disableLoading: false,
-  zoomPanPinch: undefined as ReactZoomPanPinchRef | undefined,
+  zoomPanPinch: undefined as ReactZoomPanPinchRef | undefined
 };
 
 export type Config = typeof initialStates;
@@ -31,6 +34,12 @@ const useConfig = create<Config & ConfigActions>()((set, get) => ({
   getJson: () => get().json,
   setJson: (json: string) => set({ json }),
   getJsonObj: () => get().jsonObj,
+
+  getListJson: () => get().listJson,
+
+  setListJson: (listJson) => {
+    return set({ listJson: listJson })
+  },
   setJsonObj: (jsonObj) => {
     return set({ jsonObj: jsonObj })
   },

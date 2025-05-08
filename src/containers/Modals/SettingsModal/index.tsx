@@ -5,6 +5,7 @@ import useStored from "src/store/useStored";
 import styled from "styled-components";
 import shallow from "zustand/shallow";
 import { Slider } from 'antd';
+import useConfig from "src/store/useConfig";
 
 const StyledToggle = styled(Toggle)`
   flex-flow: row-reverse;
@@ -26,13 +27,17 @@ export const SettingsModal: React.FC<{
     state => [state.toggleHideCollapse, state.hideCollapse],
     shallow
   );
+  const [toggleShowListMode, showListMode] = useStored(
+    state => [state.toggleShowListMode, state.showListMode],
+    shallow
+  );
   const [toggleHideChildrenCount, hideChildrenCount] = useStored(
     state => [state.toggleHideChildrenCount, state.hideChildrenCount],
     shallow
   );
 
   const [nodeMaxLength, setNodeMaxLength] = useStored(
-      state => [state.nodeMaxLength, state.setNodeMaxLength]
+    state => [state.nodeMaxLength, state.setNodeMaxLength]
   );
 
 
@@ -43,6 +48,9 @@ export const SettingsModal: React.FC<{
         <StyledModalWrapper>
           <StyledToggle onChange={toggleHideCollapse} checked={hideCollapse}>
             隐藏折叠/展开按钮
+          </StyledToggle>
+          <StyledToggle onChange={toggleShowListMode} checked={showListMode}>
+            列表显示模式
           </StyledToggle>
           <StyledToggle
             onChange={toggleHideChildrenCount}
@@ -57,12 +65,12 @@ export const SettingsModal: React.FC<{
           </StyledToggle>
           <span>节点值最大长度
             <Slider
-                step={1}
-                max={200}
-                min = {1}
-                defaultValue={nodeMaxLength}
-                tooltip={{ open: true }}
-                onChange={(v) => setNodeMaxLength(v)} />
+              step={1}
+              max={200}
+              min={1}
+              defaultValue={nodeMaxLength}
+              tooltip={{ open: true }}
+              onChange={(v) => setNodeMaxLength(v)} />
           </span>
         </StyledModalWrapper>
       </Modal.Content>

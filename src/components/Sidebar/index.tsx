@@ -141,7 +141,7 @@ export const Sidebar: React.FC = () => {
     // const [shareVisible, setShareVisible] = React.useState(false);
     const [isDownloadVisible, setDownloadVisible] = React.useState(false);
 
-    // const getJson = useConfig(state => state.getJson);
+    const getJson = useConfig(state => state.getJson);
     const setDirection = useGraph(state => state.setDirection);
     const setConfig = useConfig(state => state.setConfig);
     const centerView = useConfig(state => state.centerView);
@@ -161,27 +161,13 @@ export const Sidebar: React.FC = () => {
         bool: true,
     }
     const handleSave = () => {
-        // if(downloadJson.bool) {
-        //     downloadJson.bool = false;
-        //     try {
-        //         let path = utools.showSaveDialog({
-        //             title: '保存位置',
-        //             defaultPath: utools.getPath('downloads') + "/json导图.json",
-        //             buttonLabel: '保存',
-        //             properties: ['createDirectory']
-        //         }) as string;
-        //         if (path) {
-        //             window.saveTextToFile(path, getJson()).then(() => {
-        //                 toast.success("保存完成");
-        //             }).catch((e) => {
-        //                 console.error(e);
-        //                 toast.error(e.message);
-        //             });
-        //         }
-        //     }catch (e){
-        //         downloadJson.bool = true;
-        //     }
-        // }
+        var j = getJson()
+        var b = new Blob([j])
+        var bUrl = URL.createObjectURL(b)
+        var a = document.createElement("a")
+        a.href = bUrl
+        a.download = "导出.json"
+        a.click()
     };
 
     const toggleFoldNodes = () => {
@@ -204,7 +190,7 @@ export const Sidebar: React.FC = () => {
     return (
         <StyledSidebar>
             <StyledTopWrapper>
-                <Link passHref href="/">
+                <Link passHref href="/editor">
                     <StyledElement as={StyledLogo}>
                         <StyledText>J</StyledText>
                         <StyledText secondary>C</StyledText>
