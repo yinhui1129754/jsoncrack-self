@@ -353,7 +353,7 @@ export const parser = (jsonStr: string, isFolded = false, nodeMaxLength: number)
     let json = JSON.parse(jsonStr);
     let nodes: NodeData[] = [];
     let edges: EdgeData[] = [];
-
+    let notHaveParent: any = []
     const addNodes = (
         text: any,
         parent: "string" | "number" | "boolean" | "object" | "array" | "null" | false,
@@ -426,6 +426,8 @@ export const parser = (jsonStr: string, isFolded = false, nodeMaxLength: number)
                 id = addNodes(text, hasParent, false, false, obj, parentData, key)
                 if (edgesId) {
                     addEdges(edgesId, id)
+                } else {
+                    notHaveParent.push(id)
                 }
             }
 
@@ -437,7 +439,8 @@ export const parser = (jsonStr: string, isFolded = false, nodeMaxLength: number)
                     addEdges(edgesId, id2)
                 } else if (id) {
                     addEdges(id, id2)
-
+                } else if (id2) {
+                    notHaveParent.push(id2)
                 }
                 // addObj(noKeys[i][0], obj, noKeys[i][0], id)
                 addObj(noKeys[i][1], obj, noKeys[i][0], id2)
@@ -449,6 +452,8 @@ export const parser = (jsonStr: string, isFolded = false, nodeMaxLength: number)
 
             if (edgesId) {
                 addEdges(edgesId, id)
+            } else {
+                notHaveParent.push(id)
             }
         }
     }
@@ -463,7 +468,11 @@ export const parser = (jsonStr: string, isFolded = false, nodeMaxLength: number)
             addNodes(text, false, false, false, json);
         }
     } else {
-
+        const text = "";
+        const emptyId = addNodes(text, false, true, true);
+        notHaveParent.forEach(children => {
+            addEdges(emptyId, children);
+        });
     }
     console.log(nodes)
     return {
