@@ -2,7 +2,7 @@ import React from "react";
 import useConfig from "src/store/useConfig";
 import { getType } from "src/utils/getType";
 import styled from "styled-components";
-
+import { SlArrowRight } from "react-icons/sl";
 
 
 const ListWrapper = styled.div`
@@ -30,6 +30,9 @@ const ListItem = styled.div`
         overflow: hidden;
         min-width:30px;
     }
+    &.active{
+        background-color:rgba(255,255,255,0.2);
+    }
     &:hover{
         background-color:rgba(255,255,255,0.1);
     }
@@ -38,33 +41,61 @@ const ListItem = styled.div`
 
 export const List = ({ data = {}, index = -1 }: { data?: any, index?: number }) => {
     const setListJson = useConfig(state => state.setListJson)
+    const [selectData, setSelectData] = React.useState<any>({})
+    const setNowSelect = useConfig(state => state.setNowSelect)
 
-    var listJson = useConfig(state => state.listJson)
-    const handleClickItem = (data: any, index) => {
-        var type = getType(data)
+    const setChangeJson = useConfig((state) => state.setChangeJson)
+    const isChangJson = useConfig(state => state.isChangJson)
+    const changeJson = useConfig(state => state.changeJson)
+    const listJson = useConfig(state => state.listJson)
+    const handleClickItem = (nowData: any, index) => {
+        var type = getType(nowData)
         if ((type === "array" || type === "object")) {
             listJson.splice(index + 1)
-            const arr: any = [].concat(listJson)
-            arr.push(data)
+            const arr: any[] = [].concat(listJson)
+            arr.push(nowData)
+            setListJson(arr)
+        } else {
+            listJson.splice(index + 1)
+            const arr: any[] = [].concat(listJson)
             setListJson(arr)
         }
+        setNowSelect({
+            data: nowData,
+            pData: data
+        })
+        setSelectData(nowData)
     }
+    React.useEffect(() => {
+        setSelectData(null)
+    }, [data]);
+    React.useEffect(() => {
+        if (changeJson.newData &&
+            changeJson.beforeData) {
+            if (changeJson.beforeData === selectData) {
+                setSelectData(changeJson.newData)
+                setChangeJson({})
+            }
+        }
+    }, [isChangJson])
+
     var keys = Object.keys(data)
     return (
         <ListWrapper style={{ left: (index) * 320 + "px" }}>
             {
                 keys.map((key, keyIndex) => {
-                    var item = data[key]
-                    var type = getType(item)
-                    return (type === "array" || type === "object") ? (<ListItem onClick={() => { handleClickItem(item, index) }} key={keyIndex}>
+                    const item = data[key]
+                    const type = getType(item)
+                    const isActive = (selectData === item)
+                    return (type === "array" || type === "object") ? (<ListItem className={isActive ? "active" : ""} onClick={() => { handleClickItem(item, index) }} key={keyIndex}>
                         <span className="left">{key}</span>
                         {
-                            type === "array" ? (<span className="right">{item.length}&gt;</span>) : (<></>)
+                            type === "array" ? (<span className="right">{item.length}<SlArrowRight size={14} /></span>) : (<></>)
                         }
                         {
-                            type === "object" ? (<span className="right">{Object.keys(item).length}&gt;</span>) : (<></>)
+                            type === "object" ? (<span className="right">{Object.keys(item).length}<SlArrowRight size={14} /></span>) : (<></>)
                         }
-                    </ListItem>) : (<ListItem onClick={() => { handleClickItem(item, index) }} key={keyIndex}>
+                    </ListItem>) : (<ListItem className={isActive ? "active" : ""} onClick={() => { handleClickItem(item, index) }} key={keyIndex}>
                         <span className="left2">{key}</span>
                         <span className="right2">{item}</span>
                     </ListItem>)

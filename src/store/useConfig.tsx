@@ -13,12 +13,33 @@ interface ConfigActions {
   setJsonObj: (jsonObj: any) => any;
   getListJson: () => any;
   setListJson: (listJson: any) => any;
+
+  getNowSelect: () => any;
+  setNowSelect: (nowSelectData: any) => any;
+  checkIsChangJson: () => any;
+  setChangeJson: (j) => any
 }
 
 const initialStates = {
+  // 编辑的json字符串
   json: defaultJson,
+  // 编辑的json对象
   jsonObj: {},
-  listJson: [],
+
+  // 列表模式下的json列表 对象
+  listJson: [] as any,
+  // 列表模式下选中的json数据
+  nowSelectData: {} as any,
+
+  /**
+   * 编辑器修改json
+   */
+  isChangJson: false,
+
+  changeJson: {} as any,
+
+
+
   cursorMode: "move" as "move" | "navigation",
   foldNodes: false,
   hideEditor: false,
@@ -34,9 +55,16 @@ const useConfig = create<Config & ConfigActions>()((set, get) => ({
   getJson: () => get().json,
   setJson: (json: string) => set({ json }),
   getJsonObj: () => get().jsonObj,
+  getNowSelect: () => get().nowSelectData,
+  checkIsChangJson: () => set({ isChangJson: !get().isChangJson }),
 
+  setNowSelect: (nowSelectData) => {
+    return set({ nowSelectData: nowSelectData })
+  },
   getListJson: () => get().listJson,
-
+  setChangeJson: (j) => {
+    return set({ changeJson: j })
+  },
   setListJson: (listJson) => {
     return set({ listJson: listJson })
   },

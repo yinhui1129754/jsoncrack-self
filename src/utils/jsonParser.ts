@@ -474,7 +474,7 @@ export const parser = (jsonStr: string, isFolded = false, nodeMaxLength: number)
             addEdges(emptyId, children);
         });
     }
-    console.log(nodes)
+    // console.log(nodes)
     return {
         nodes, edges,
         jsonObj: json

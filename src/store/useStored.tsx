@@ -37,7 +37,7 @@ const useStored = create(
     persist<Config>(
         set => ({
             lightmode: false,
-            showListMode: false,
+            showListMode: true,
             hideCollapse: false,
             hideChildrenCount: true,
             nodeMaxLength: 40,

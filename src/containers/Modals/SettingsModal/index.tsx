@@ -5,7 +5,6 @@ import useStored from "src/store/useStored";
 import styled from "styled-components";
 import shallow from "zustand/shallow";
 import { Slider } from 'antd';
-import useConfig from "src/store/useConfig";
 
 const StyledToggle = styled(Toggle)`
   flex-flow: row-reverse;

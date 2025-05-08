@@ -4,7 +4,6 @@ import { Tools } from "../Tools";
 import { List } from "./list";
 import useConfig from "src/store/useConfig";
 import { parser } from "src/utils/jsonParser";
-import { json } from "stream/consumers";
 import useGraph from "src/store/useGraph";
 import useStored from "src/store/useStored";
 
@@ -21,6 +20,7 @@ const ListEditorWrapper = styled.div`
     position:relative;
     overflow:auto;
 `
+
 export const ListEditor: React.FC = () => {
     // const setJson = useConfig(state => state.setJson);
     const setGraphValue = useGraph(state => state.setGraphValue);

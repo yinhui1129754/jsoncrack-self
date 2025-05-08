@@ -7,6 +7,7 @@ import useConfig from "src/store/useConfig";
 import styled from "styled-components";
 import useStored from "src/store/useStored";
 import { ListEditor } from "./ListEditor";
+import RightView from "./ListEditor/rightView";
 
 export const StyledEditor = styled(Allotment)`
   position: relative !important;
@@ -32,6 +33,9 @@ const Panes: React.FC = () => {
     <StyledEditor proportionalLayout={false} vertical={isMobile}>
       <Allotment.Pane minSize={0} maxSize={Infinity}>
         <ListEditor />
+      </Allotment.Pane>
+      <Allotment.Pane minSize={350} maxSize={500}>
+        <RightView />
       </Allotment.Pane>
     </StyledEditor>
   ) : (
