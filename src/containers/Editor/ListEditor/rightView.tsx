@@ -4,18 +4,60 @@ import useConfig from "src/store/useConfig";
 import styled from "styled-components";
 import useStored from "src/store/useStored";
 import Editor, { loader, Monaco } from "@monaco-editor/react";
-import { Loading } from "src/components/Loading";
+// import { Loading } from "src/components/Loading";
+import toast from "react-hot-toast";
+import { getType } from "src/utils/getType";
+// import { Input } from "antd";
+import { ToastLoading } from "src/components/Loading/toastLoading";
 loader.config({
     paths: { vs: "./editor/vs" },
     "vs/nls": { availableLanguages: { '*': 'zh-cn' } }
 });
+const EditorWrapperParent = styled.div`
+position:absolute;
+left:0;
+top:0px;
+height: calc(100%);
+width:calc(100%);
+`;
+const EditorWrapperChild = styled.div`
+position:absolute;
+left:0;
+top:0px;
+height: calc(100%);
+width:calc(100%);
+`;
 const EditorWrapper = styled.div`
     position:absolute;
     left:0;
-    top:60px;
-    height: calc(100% - 60px);
-    width:100%;
+    top:40px;
+    height: calc(100% - 40px);
+    width:calc(100%);
+
 `;
+const TopType = styled.div`
+     height:40px;
+    line-height:40px;
+    padding-left:15px;
+    padding-right:15px;
+    color:rgb(148, 163, 184);
+    display:flex;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+    >span{
+        display:block;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        min-width:30px;
+    }
+    &.active{
+        background-color:rgba(255,255,255,0.2);
+    }
+    &:hover{
+        background-color:rgba(255,255,255,0.1);
+    }
+`
 const editorOptions = {
     formatOnPaste: true,
     minimap: {
@@ -32,9 +74,11 @@ function handleEditorWillMount(editor: Monaco) {
 
 const RightView = () => {
     const nowSelectData = useConfig((state) => state.nowSelectData)
+    const setJsonNoHooks = useConfig(state => state.setJsonNoHooks)
+    const jsonObj = useConfig(state => state.jsonObj)
     const editorRef = useRef(null);
     const data = nowSelectData.data ? JSON.stringify(nowSelectData.data, null, 2) : ""
-    const [value] = useState(data)
+    const [value, setValue] = useState(data)
     const lightmode = useStored(state => (state.lightmode ? "light" : "vs-dark"));
 
     const handleEditorMount = (editor) => {
@@ -47,17 +91,24 @@ const RightView = () => {
     const setListJson = useConfig(state => state.setListJson)
     // 防止在渲染触发回调
     const isProgrammaticUpdate = useRef(false);
+    const [type, setType] = useState(getType(nowSelectData))
     React.useEffect(() => {
         const data = nowSelectData.data ? JSON.stringify(nowSelectData.data, null, 2) : ""
+        var nowType = getType(nowSelectData.data)
         if (data !== value) {
             if (editorRef.current) {
                 isProgrammaticUpdate.current = true; // 标记为编程更新
                 (editorRef.current as any).setValue(data);
                 isProgrammaticUpdate.current = false; // 重置标记（需延时确保生效）
+            } else {
+                setValue(data)
             }
+
+            setType(nowType)
         }
     }, [nowSelectData]);
     const handleChange = (value: string | undefined) => {
+        // console.log(value)
         if (isProgrammaticUpdate.current) {
             return; // 跳过编程触发的更新
         }
@@ -93,30 +144,41 @@ const RightView = () => {
                     checkIsChangJson()
 
                     nowSelectData.data = data
-
+                    setJsonNoHooks(JSON.stringify(jsonObj, null, 2))
                 }
 
             }
 
-        } catch (e) { }
+        } catch (e) {
+            toast.error("json 格式化报错请检查！！")
+        }
     }
 
     return (
-        <EditorWrapper>
+        <EditorWrapperParent>
+            {
+                (nowSelectData.data) ? (<EditorWrapperChild>
+                    <TopType><span>类型</span><span>{type}</span></TopType>
+                    <EditorWrapper>
+                        <Editor
+                            height={(type === "array" || type === "object") ? "400px" : "60px"}
+                            defaultLanguage="json"
+                            theme={lightmode}
+                            defaultValue={value}
+                            value={value}
+                            options={editorOptions}
+                            onMount={handleEditorMount}
+                            onChange={handleChange}
+
+                            loading={<ToastLoading message="加载种 ...." />}
+                            beforeMount={handleEditorWillMount}
+                        />
+                    </EditorWrapper>
+                </EditorWrapperChild>) : (<EditorWrapperChild><TopType><span>暂无选择</span><span></span></TopType></EditorWrapperChild>)
+            }
 
 
-            <Editor
-                height="100%"
-                defaultLanguage="json"
-                theme={lightmode}
-                value={value}
-                options={editorOptions}
-                onMount={handleEditorMount}
-                onChange={handleChange}
-                loading={<Loading message="加载中 ..." />}
-                beforeMount={handleEditorWillMount}
-            />
-        </EditorWrapper>
+        </EditorWrapperParent>
     )
 };
 

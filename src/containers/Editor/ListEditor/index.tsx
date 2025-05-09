@@ -28,7 +28,8 @@ export const ListEditor: React.FC = () => {
     const setJsonObj = useConfig(state => state.setJsonObj)
     const listJson = useConfig(state => state.listJson)
 
-    const json = useConfig(state => state.json);
+    const json = useConfig(state => state.getJson());
+    const isTriggerUpdate = useConfig(state => state.isTriggerUpdate)
     const foldNodes = useConfig(state => state.foldNodes);
     const nodeMaxLength = useStored(state => state.nodeMaxLength);
     React.useEffect(() => {
@@ -44,7 +45,7 @@ export const ListEditor: React.FC = () => {
                 msgDiv.innerHTML = (JSON.stringify(e))
             }
         }
-    }, [foldNodes, json, setGraphValue]);
+    }, [isTriggerUpdate, setGraphValue]);
     return (
         <StyledEditorWrapper>
             <Tools />

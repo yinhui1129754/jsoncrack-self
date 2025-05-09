@@ -157,9 +157,9 @@ export const Sidebar: React.FC = () => {
         state => [state.foldNodes, state.hideEditor],
         shallow
     );
-    const downloadJson = {
-        bool: true,
-    }
+    // const downloadJson = {
+    //     bool: true,
+    // }
     const handleSave = () => {
         var j = getJson()
         var b = new Blob([j])

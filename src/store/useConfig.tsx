@@ -4,6 +4,10 @@ import create from "zustand";
 
 interface ConfigActions {
   setJson: (json: string) => void;
+  setJsonNoHooks: (json: string) => void;
+
+  getIsTriggerUpdate: () => boolean;
+  checkIsTriggerUpdate: () => void;
   setConfig: (key: keyof Config, value: unknown) => void;
   getJson: () => string;
   zoomIn: () => void;
@@ -36,6 +40,12 @@ const initialStates = {
    */
   isChangJson: false,
 
+
+  /**
+   * 专门用于更新的一个变量 替代json
+   */
+  isTriggerUpdate: false,
+
   changeJson: {} as any,
 
 
@@ -52,8 +62,17 @@ export type Config = typeof initialStates;
 
 const useConfig = create<Config & ConfigActions>()((set, get) => ({
   ...initialStates,
+
+  getIsTriggerUpdate: () => get().isTriggerUpdate,
+  checkIsTriggerUpdate: () => set({ isTriggerUpdate: !get().isTriggerUpdate }),
   getJson: () => get().json,
-  setJson: (json: string) => set({ json }),
+  setJson: (json: string) => {
+    set({ json })
+    get().checkIsTriggerUpdate()
+  },
+  setJsonNoHooks: (json) => {
+    set({ json })
+  },
   getJsonObj: () => get().jsonObj,
   getNowSelect: () => get().nowSelectData,
   checkIsChangJson: () => set({ isChangJson: !get().isChangJson }),

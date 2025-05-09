@@ -72,12 +72,12 @@ export const Tools: React.FC = () => {
             >
               <TbSettings />
             </StyledToolElement>
-            <StyledToolElement
+            {/* <StyledToolElement
               aria-label="save"
               onClick={() => setDownloadVisible(true)}
             >
               <FiDownload />
-            </StyledToolElement>
+            </StyledToolElement> */}
           </StyledTools>
         ) : (<StyledTools>
           <StyledToolElement aria-label="fullscreen" onClick={toggleEditor}>

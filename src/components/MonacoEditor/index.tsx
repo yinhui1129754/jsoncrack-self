@@ -1,12 +1,13 @@
-import React from "react";
+import React, { useRef } from "react";
 import { parse } from "jsonc-parser";
-import { Loading } from "src/components/Loading";
+// import { Loading } from "src/components/Loading";
 import useConfig from "src/store/useConfig";
 import useGraph from "src/store/useGraph";
 import useStored from "src/store/useStored";
 import { parser } from "src/utils/jsonParser";
 import styled from "styled-components";
 import Editor, { loader, Monaco } from "@monaco-editor/react";
+import { ToastLoading } from "../Loading/toastLoading";
 
 
 loader.config({
@@ -42,15 +43,24 @@ export const MonacoEditor = ({
 }) => {
     const [value, setValue] = React.useState<string | undefined>("");
     const setJson = useConfig(state => state.setJson);
+    // const setJsonNoHooks = useConfig(state => state.setJsonNoHooks);
+    // const checkIsTriggerUpdate = useConfig(state => state.checkIsTriggerUpdate)
     const setGraphValue = useGraph(state => state.setGraphValue);
     const setListJson = useConfig(state => state.setListJson)
     const setJsonObj = useConfig(state => state.setJsonObj)
 
-    const json = useConfig(state => state.json);
+    const json = useConfig(state => state.getJson());
+    // const isTriggerUpdate = useConfig(state => state.isTriggerUpdate)
     const foldNodes = useConfig(state => state.foldNodes);
     const lightmode = useStored(state => (state.lightmode ? "light" : "vs-dark"));
     const nodeMaxLength = useStored(state => state.nodeMaxLength);
     const showListMode = useStored(state => state.showListMode)
+    // 防止在渲染触发回调
+    // const isProgrammaticUpdate = useRef(false);
+    const editorRef = useRef(null);
+    const handleEditorMount = (editor) => {
+        editorRef.current = editor;
+    }
     React.useEffect(() => {
         try {
 
@@ -99,7 +109,8 @@ export const MonacoEditor = ({
                 theme={lightmode}
                 options={editorOptions}
                 onChange={setValue}
-                loading={<Loading message="加载中 ..." />}
+                onMount={handleEditorMount}
+                loading={<ToastLoading message="加载中 ..." />}
                 beforeMount={handleEditorWillMount}
             />
         </StyledWrapper>

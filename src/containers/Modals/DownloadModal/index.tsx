@@ -1,5 +1,5 @@
 import React from "react";
-import { toBlob, toPng } from "html-to-image";
+import { toBlob } from "html-to-image";
 import { TwitterPicker } from "react-color";
 import { TwitterPickerStylesProps } from "react-color/lib/components/twitter/Twitter";
 import toast from "react-hot-toast";
@@ -71,6 +71,12 @@ function downloadImg(blob: Blob, name: string) {
             //         throw new Error(e);
             //     });
             // }
+            var b = new Blob([blob])
+            var bUrl = URL.createObjectURL(b)
+            var a = document.createElement("a")
+            a.href = bUrl
+            a.download = name
+            a.click()
         } catch (e) {
             downloadImgState.bool = true;
         }
@@ -125,13 +131,17 @@ export const DownloadModal: React.FC<ModalProps> = ({ visible, setVisible }) => 
 
             const imageElement = document.querySelector("svg[id*='ref']") as HTMLElement;
 
-            const imgElement = await toPng(imageElement, {
+            const blob = await toBlob(imageElement, {
                 quality: fileDetails.quality,
                 backgroundColor: fileDetails.backgroundColor,
             });
-            if (!imgElement) return;
-            // utools.copyImage(imgElement)
+            if (!blob) return;
+
+            const clipboardItem = new ClipboardItem({ 'image/png': blob });
+            await navigator.clipboard.write([clipboardItem]);
             toast.success("复制成功");
+            // utools.copyImage(imgElement)
+
         } catch (error) {
             toast.error("复制成功失败");
         } finally {
