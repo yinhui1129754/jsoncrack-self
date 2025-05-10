@@ -38,7 +38,6 @@ export const ListEditor: React.FC = () => {
             const { jsonObj } = parser(json, foldNodes, nodeMaxLength);
             setJsonObj(jsonObj)
             setListJson([jsonObj])
-
         } catch (e) {
             let msgDiv = document.getElementById("error_message2");
             if (msgDiv != null) {

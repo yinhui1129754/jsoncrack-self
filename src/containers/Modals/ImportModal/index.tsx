@@ -43,29 +43,31 @@ export const ImportModal: React.FC<ModalProps> = ({ visible, setVisible }) => {
     const [url, setURL] = React.useState("");
     const [jsonFile, setJsonFile] = React.useState<Blob | null>(null);
 
-    const selectFileState = {
-        bool: true,
-    }
+
     const handleSelectFile = () => {
-        if (selectFileState.bool) {
-            selectFileState.bool = false;
-            try {
-                const input = document.createElement("input");
-                input.type = "file";
-                input.accept = ".json";
-                input.addEventListener("change", (e) => {
-                    if (input.files && input.files[0]) {
-                        setJsonFile(input.files[0]);
-                        handleImportFile();
-                    }
-                });
-                input.click();
-            } catch (e) {
-                selectFileState.bool = true;
-                toast.error("导入Json失败")
-            }
+
+        setJsonFile(null);
+        try {
+            const input = document.createElement("input");
+            input.type = "file";
+            input.accept = ".json";
+            input.addEventListener("change", (e) => {
+                if (input.files && input.files[0]) {
+                    setJsonFile(input.files[0]);
+                    setTimeout(() => { handleImportFile() }, 0)
+                }
+            });
+            setTimeout(() => input.click(), 0);
+        } catch (e) {
+            toast.error("导入Json失败")
         }
     };
+    React.useEffect(() => {
+        if (visible) {
+            setURL("");
+            setJsonFile(null)
+        }
+    }, [visible])
 
     const handleImportFile = () => {
         if (url) {
@@ -80,7 +82,6 @@ export const ImportModal: React.FC<ModalProps> = ({ visible, setVisible }) => {
                 }).catch(() => toast.error("JSON读取失败!"))
                 .finally(() => toast.dismiss("toastFetch"));
         }
-
         if (jsonFile) {
             var reader = new FileReader()
             reader.readAsText(jsonFile, "UTF-8")
@@ -91,7 +92,6 @@ export const ImportModal: React.FC<ModalProps> = ({ visible, setVisible }) => {
                 } catch (e) {
                     toast.error("JSON读取失败!");
                 }
-                selectFileState.bool = true;
             }
             // window.readFileAsText(jsonFile).then((data) => {
             //     setJson(data as string);

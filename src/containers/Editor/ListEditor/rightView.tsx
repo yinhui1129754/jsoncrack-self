@@ -30,14 +30,14 @@ width:calc(100%);
 const EditorWrapper = styled.div`
     position:absolute;
     left:0;
-    top:40px;
-    height: calc(100% - 40px);
+    top:36px;
+    height: calc(100% - 36px);
     width:calc(100%);
 
 `;
 const TopType = styled.div`
-     height:40px;
-    line-height:40px;
+     height:36px;
+    line-height:36px;
     padding-left:15px;
     padding-right:15px;
     color:rgb(148, 163, 184);
@@ -98,8 +98,7 @@ const RightView = () => {
         if (data !== value) {
             if (editorRef.current) {
                 isProgrammaticUpdate.current = true; // 标记为编程更新
-                (editorRef.current as any).setValue(data);
-                isProgrammaticUpdate.current = false; // 重置标记（需延时确保生效）
+                setValue(data);
             } else {
                 setValue(data)
             }
@@ -108,8 +107,8 @@ const RightView = () => {
         }
     }, [nowSelectData]);
     const handleChange = (value: string | undefined) => {
-        // console.log(value)
         if (isProgrammaticUpdate.current) {
+            isProgrammaticUpdate.current = false; // 重置标记（需延时确保生效）
             return; // 跳过编程触发的更新
         }
         try {
@@ -161,7 +160,7 @@ const RightView = () => {
                     <TopType><span>类型</span><span>{type}</span></TopType>
                     <EditorWrapper>
                         <Editor
-                            height={(type === "array" || type === "object") ? "400px" : "60px"}
+                            height={(type === "array" || type === "object") ? "100%" : "60px"}
                             defaultLanguage="json"
                             theme={lightmode}
                             defaultValue={value}

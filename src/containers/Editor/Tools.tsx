@@ -66,12 +66,16 @@ export const Tools: React.FC = () => {
       {
         showListMode ? (
           <StyledTools>
+            <StyledToolElement aria-label="fullscreen" onClick={toggleEditor}>
+              <AiOutlineFullscreen />
+            </StyledToolElement>
             <StyledToolElement
               aria-label="settings"
               onClick={() => setSettingsVisible(true)}
             >
               <TbSettings />
             </StyledToolElement>
+
             {/* <StyledToolElement
               aria-label="save"
               onClick={() => setDownloadVisible(true)}

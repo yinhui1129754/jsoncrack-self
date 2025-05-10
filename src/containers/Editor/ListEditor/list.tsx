@@ -12,6 +12,7 @@ const ListWrapper = styled.div`
     box-sizing: border-box;
     position:absolute;
     top:0;
+    overflow:auto;
 `
 
 const ListItem = styled.div`
@@ -23,6 +24,7 @@ const ListItem = styled.div`
     display:flex;
     justify-content: space-between;
     flex-wrap: nowrap;
+    
     >span{
         display:block;
         white-space: nowrap;

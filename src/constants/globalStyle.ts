@@ -1,6 +1,29 @@
 import { createGlobalStyle } from "styled-components";
 
 const GlobalStyle = createGlobalStyle`
+
+  ::-webkit-scrollbar {
+    width: 6px;   /* 垂直滚动条宽度 */
+    height: 6px;  /* 水平滚动条宽度 */
+    background: transparent; /* 背景透明，模拟自动隐藏 */
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.3); /* 半透明灰色 */
+    border-radius: 3px;             /* 圆角 */
+    transition: background 0.3s;    /* 过渡效果 */
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.5);
+  }
+  ::-webkit-scrollbar-thumb:active {
+    background: rgba(0, 0, 0, 0.7);
+  }
+
+  ::-webkit-scrollbar-button {
+    display: none;
+  }
   html, body {
     margin: 0;
     padding: 0;
@@ -10,6 +33,7 @@ const GlobalStyle = createGlobalStyle`
     font-weight: 400;
     font-size: 16px;
     scroll-behavior: smooth;
+    scrollbar-width: thin; 
     height: 100%;
 
     background-color: #000000;

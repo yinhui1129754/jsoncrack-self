@@ -31,10 +31,18 @@ const Panes: React.FC = () => {
 
   return showListMode ? (
     <StyledEditor proportionalLayout={false} vertical={isMobile}>
-      <Allotment.Pane minSize={0} maxSize={Infinity}>
+      <Allotment.Pane
+        preferredSize={isMobile ? "100%" : 300}
+        minSize={hideEditor ? 0 : 350}
+        maxSize={isMobile ? Infinity : 450}
+        visible={!hideEditor}
+      >
+        <JsonEditor />
+      </Allotment.Pane>
+      <Allotment.Pane minSize={20} maxSize={Infinity}>
         <ListEditor />
       </Allotment.Pane>
-      <Allotment.Pane minSize={350} maxSize={500}>
+      <Allotment.Pane minSize={350} maxSize={450}>
         <RightView />
       </Allotment.Pane>
     </StyledEditor>
