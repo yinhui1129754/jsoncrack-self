@@ -35,7 +35,7 @@ function handleEditorWillMount(monaco: Monaco) {
         comments: "ignore",
     });
 }
-
+var timeIndex = -1
 export const MonacoEditor = ({
     setHasError,
 }: {
@@ -50,13 +50,13 @@ export const MonacoEditor = ({
     const setJsonObj = useConfig(state => state.setJsonObj)
 
     const json = useConfig(state => state.getJson());
-    // const isTriggerUpdate = useConfig(state => state.isTriggerUpdate)
+    const isTriggerUpdate = useConfig(state => state.isTriggerUpdate)
     const foldNodes = useConfig(state => state.foldNodes);
     const lightmode = useStored(state => (state.lightmode ? "light" : "vs-dark"));
     const nodeMaxLength = useStored(state => state.nodeMaxLength);
     const showListMode = useStored(state => state.showListMode)
     // 防止在渲染触发回调
-    // const isProgrammaticUpdate = useRef(false);
+    const isProgrammaticUpdate = useRef(false);
     const editorRef = useRef(null);
     const handleEditorMount = (editor) => {
         editorRef.current = editor;
@@ -65,12 +65,12 @@ export const MonacoEditor = ({
         try {
 
             const { nodes, edges, jsonObj } = parser(json, foldNodes, nodeMaxLength);
+            isProgrammaticUpdate.current = true;
             setValue(json);
             setJsonObj(jsonObj)
             if (showListMode) {
                 setListJson([jsonObj])
 
-                console.log(jsonObj)
             } else {
                 setGraphValue("nodes", nodes);
                 setGraphValue("edges", edges);
@@ -82,23 +82,32 @@ export const MonacoEditor = ({
                 msgDiv.innerHTML = (JSON.stringify(e))
             }
         }
-    }, [foldNodes, json, setGraphValue]);
-
+    }, [foldNodes, isTriggerUpdate, setGraphValue]);
     React.useEffect(() => {
-        const formatTimer = setTimeout(() => {
-            if (!value) {
+        isProgrammaticUpdate.current = true;
+
+        setValue(json);
+    }, [json]);
+
+    const handleChange = (v) => {
+        window.clearTimeout(timeIndex)
+        setValue(v)
+        if (isProgrammaticUpdate.current) {
+            isProgrammaticUpdate.current = false
+            return;
+        }
+        timeIndex = window.setTimeout(() => {
+            if (!v) {
                 setHasError(false);
                 return setJson("{}");
             }
             const errors = [];
-            const parsedJSON = JSON.stringify(parse(value, errors), null, 2);
+            const parsedJSON = JSON.stringify(parse(v, errors), null, 2);
             if (errors.length) return setHasError(true);
             setJson(parsedJSON);
             setHasError(false);
         }, 1200);
-
-        return () => clearTimeout(formatTimer);
-    }, [value, setJson, setHasError]);
+    }
 
     return (
         <StyledWrapper>
@@ -108,7 +117,7 @@ export const MonacoEditor = ({
                 value={value}
                 theme={lightmode}
                 options={editorOptions}
-                onChange={setValue}
+                onChange={handleChange}
                 onMount={handleEditorMount}
                 loading={<ToastLoading message="加载中 ..." />}
                 beforeMount={handleEditorWillMount}
