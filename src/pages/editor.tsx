@@ -1,5 +1,4 @@
 import React from "react";
-import { Sidebar } from "src/components/Sidebar";
 import Panes from "src/containers/Editor/Panes";
 import styled from "styled-components";
 
@@ -26,7 +25,6 @@ const EditorPage: React.FC = () => {
   return (
     <StyledEditorWrapper>
       <StyledPageWrapper>
-        <Sidebar />
         <StyledEditorWrapper>
           <Panes />
         </StyledEditorWrapper>
