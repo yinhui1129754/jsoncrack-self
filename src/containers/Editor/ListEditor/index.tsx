@@ -4,7 +4,6 @@ import { Tools } from "../Tools";
 import { List } from "./list";
 import useConfig from "src/store/useConfig";
 import { parser } from "src/utils/jsonParser";
-import useStored from "src/store/useStored";
 
 const StyledEditorWrapper = styled.div`
   display: flex;
