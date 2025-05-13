@@ -2,7 +2,6 @@ import React, { useRef } from "react";
 import { parse } from "jsonc-parser";
 // import { Loading } from "src/components/Loading";
 import useConfig from "src/store/useConfig";
-import useGraph from "src/store/useGraph";
 import useStored from "src/store/useStored";
 import { parser } from "src/utils/jsonParser";
 import styled from "styled-components";
@@ -46,16 +45,12 @@ export const MonacoEditor = ({
     const setJson = useConfig(state => state.setJson);
     // const setJsonNoHooks = useConfig(state => state.setJsonNoHooks);
     // const checkIsTriggerUpdate = useConfig(state => state.checkIsTriggerUpdate)
-    const setGraphValue = useGraph(state => state.setGraphValue);
     const setListJson = useConfig(state => state.setListJson)
     const setJsonObj = useConfig(state => state.setJsonObj)
 
     const json = useConfig(state => state.getJson());
     const isTriggerUpdate = useConfig(state => state.isTriggerUpdate)
-    const foldNodes = useConfig(state => state.foldNodes);
     const lightmode = useStored(state => (state.lightmode ? "light" : "vs-dark"));
-    const nodeMaxLength = useStored(state => state.nodeMaxLength);
-    const showListMode = useStored(state => state.showListMode)
     // 防止在渲染触发回调
     const isProgrammaticUpdate = useRef(false);
     const editorRef = useRef(null);
@@ -66,17 +61,12 @@ export const MonacoEditor = ({
     React.useEffect(() => {
         try {
 
-            const { nodes, edges, jsonObj } = parser(json, foldNodes, nodeMaxLength);
+            const { jsonObj } = parser(json);
             isProgrammaticUpdate.current = true;
             setValue(json);
             setJsonObj(jsonObj)
-            if (showListMode) {
-                setListJson([jsonObj])
+            setListJson([jsonObj])
 
-            } else {
-                setGraphValue("nodes", nodes);
-                setGraphValue("edges", edges);
-            }
 
         } catch (e) {
             let msgDiv = document.getElementById("error_message2");
@@ -84,7 +74,7 @@ export const MonacoEditor = ({
                 msgDiv.innerHTML = (JSON.stringify(e))
             }
         }
-    }, [foldNodes, isTriggerUpdate, setGraphValue]);
+    }, [isTriggerUpdate]);
     React.useEffect(() => {
         isProgrammaticUpdate.current = true;
 

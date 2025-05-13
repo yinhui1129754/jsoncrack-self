@@ -4,7 +4,6 @@ import { Tools } from "../Tools";
 import { List } from "./list";
 import useConfig from "src/store/useConfig";
 import { parser } from "src/utils/jsonParser";
-import useGraph from "src/store/useGraph";
 import useStored from "src/store/useStored";
 
 const StyledEditorWrapper = styled.div`
@@ -23,19 +22,16 @@ const ListEditorWrapper = styled.div`
 
 export const ListEditor: React.FC = () => {
     // const setJson = useConfig(state => state.setJson);
-    const setGraphValue = useGraph(state => state.setGraphValue);
     const setListJson = useConfig(state => state.setListJson)
     const setJsonObj = useConfig(state => state.setJsonObj)
     const listJson = useConfig(state => state.listJson)
 
     const json = useConfig(state => state.getJson());
     const isTriggerUpdate = useConfig(state => state.isTriggerUpdate)
-    const foldNodes = useConfig(state => state.foldNodes);
-    const nodeMaxLength = useStored(state => state.nodeMaxLength);
     React.useEffect(() => {
         try {
 
-            const { jsonObj } = parser(json, foldNodes, nodeMaxLength);
+            const { jsonObj } = parser(json);
             setJsonObj(jsonObj)
             setListJson([jsonObj])
         } catch (e) {
@@ -44,7 +40,7 @@ export const ListEditor: React.FC = () => {
                 msgDiv.innerHTML = (JSON.stringify(e))
             }
         }
-    }, [isTriggerUpdate, setGraphValue]);
+    }, [isTriggerUpdate]);
     return (
         <StyledEditorWrapper>
             <Tools />
