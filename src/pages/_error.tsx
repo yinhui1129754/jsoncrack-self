@@ -41,7 +41,7 @@ const NotFound: React.FC = () => {
       <StyledSubMessage>
         Looks like you&apos;re lost, let&apos;s head back to the home!
       </StyledSubMessage>
-      <Button type="button" onClick={() => router.push("/")}>
+      <Button type="button" onClick={() => router.push("/editor")}>
         Go Home
       </Button>
     </StyledNotFound>

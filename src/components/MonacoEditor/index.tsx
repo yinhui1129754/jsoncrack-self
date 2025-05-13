@@ -36,6 +36,7 @@ function handleEditorWillMount(monaco: Monaco) {
     });
 }
 var timeIndex = -1
+var isload = false
 export const MonacoEditor = ({
     setHasError,
 }: {
@@ -61,6 +62,7 @@ export const MonacoEditor = ({
     const handleEditorMount = (editor) => {
         editorRef.current = editor;
     }
+
     React.useEffect(() => {
         try {
 
@@ -87,6 +89,43 @@ export const MonacoEditor = ({
         isProgrammaticUpdate.current = true;
 
         setValue(json);
+        if ((window as any).vscodeBaseUri) {
+            var tgWin = (window as any).tgWin;
+            if (tgWin) {
+
+                tgWin.postMessage({
+                    command: "changeJson",
+                    json: json
+                })
+                window.addEventListener('message', event => {
+                    const message = event.data; // 接收消息
+
+                    switch (message.command) {
+                        case "setJson": {
+                            setJson(message.json)
+                            break;
+                        }
+                        case 'getJson': {
+                            tgWin.postMessage({
+                                command: "getJson",
+                                json: json
+                            })
+                            break;
+                        }
+
+                    }
+                });
+
+                if (!isload) {
+                    isload = true
+
+                    tgWin.postMessage({
+                        command: "loaded"
+                    })
+                }
+            }
+
+        }
     }, [json]);
 
     const handleChange = (v) => {
