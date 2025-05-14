@@ -51,6 +51,7 @@ export const MonacoEditor = ({
     const json = useConfig(state => state.getJson());
     const isTriggerUpdate = useConfig(state => state.isTriggerUpdate)
     const lightmode = useStored(state => (state.lightmode ? "light" : "vs-dark"));
+    const setLightTheme = useStored(state => state.setLightTheme);
     // 防止在渲染触发回调
     const isProgrammaticUpdate = useRef(false);
     const editorRef = useRef(null);
@@ -91,6 +92,10 @@ export const MonacoEditor = ({
                     const message = event.data; // 接收消息
 
                     switch (message.command) {
+                        case "setTheme": {
+                            setLightTheme(message.json === "light")
+                            break;
+                        }
                         case "setJson": {
                             setJson(message.json)
                             break;

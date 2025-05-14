@@ -5,7 +5,6 @@ import styled from "styled-components";
 import { SlArrowRight } from "react-icons/sl";
 import { Menu, MenuRef } from "antd";
 import useStored from "src/store/useStored";
-import toast from "react-hot-toast";
 
 
 const MenuWrapper = styled.div`
@@ -130,7 +129,11 @@ export const List = ({ data = {}, index = -1 }: { data?: any, index?: number }) 
                 setListJson(arr)
             }
         } else if (info.key === "2") {
-            toast.error("暂未支持")
+            var key = rightItem.key
+            delete data[key]
+            setJsonNoHooks(JSON.stringify(jsonObj, null, 2))
+            const arr: any[] = [].concat(listJson)
+            setListJson(arr)
         }
     }
     React.useEffect(() => {
