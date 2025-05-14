@@ -115,12 +115,16 @@ const RightView = () => {
             if (typeof value !== "undefined") {
                 const data = JSON.parse(value);
                 if (nowSelectData.pData) {
-                    for (var i in nowSelectData.pData) {
-                        if (nowSelectData.pData[i] === nowSelectData.data) {
-                            nowSelectData.pData[i] = data
-                            break
-                        }
+                    var nowSelectKey = nowSelectData.key
+                    if (nowSelectData.pData[nowSelectKey] === nowSelectData.data) {
+                        nowSelectData.pData[nowSelectKey] = data
                     }
+                    // for (var i in nowSelectData.pData) {
+                    //     if (nowSelectData.pData[i] === nowSelectData.data) {
+                    //         nowSelectData.pData[i] = data
+                    //         break
+                    //     }
+                    // }
                     var canRemove = false
                     for (let i = 0; i < listJson.length; i++) {
                         if (canRemove) {

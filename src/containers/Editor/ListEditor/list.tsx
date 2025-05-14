@@ -56,7 +56,7 @@ const ListItem = styled.div`
 export const List = ({ data = {}, index = -1 }: { data?: any, index?: number }) => {
     const lightmode = useStored(state => state.lightmode)
     const setListJson = useConfig(state => state.setListJson)
-    const setJson = useConfig(state => state.setJson)
+    const setJsonNoHooks = useConfig(state => state.setJsonNoHooks)
     const jsonObj = useConfig(state => state.jsonObj)
     const [selectData, setSelectData] = React.useState<any>({})
     const setNowSelect = useConfig(state => state.setNowSelect)
@@ -71,13 +71,8 @@ export const List = ({ data = {}, index = -1 }: { data?: any, index?: number }) 
 
     const [rightItem, setRightItem] = useState({ key: "", obj: {} });
     const menuRef = useRef<MenuRef>(null);
-    const [updateFlag, setUpdateFlag] = useState(0);
 
-    // 通过更新无关状态触发渲染
-    const forceUpdate = () => {
-        setUpdateFlag(prev => prev + 1); // 修改任意状态值
-    };
-    const handleClickItem = (nowData: any, index) => {
+    const handleClickItem = (nowData: any, index, key) => {
         var type = getType(nowData)
         if ((type === "array" || type === "object")) {
             listJson.splice(index + 1)
@@ -91,9 +86,13 @@ export const List = ({ data = {}, index = -1 }: { data?: any, index?: number }) 
         }
         setNowSelect({
             data: nowData,
-            pData: data
+            pData: data,
+            key: key
         })
-        setSelectData(nowData)
+        setSelectData({
+            val: nowData,
+            key: key
+        })
     }
 
     const handleContext = (e: React.MouseEvent, dataItem, key, index) => {
@@ -125,16 +124,17 @@ export const List = ({ data = {}, index = -1 }: { data?: any, index?: number }) 
                     key = `${rightItem.key}_copy${index}`
                 }
                 data[key] = JSON.parse(JSON.stringify(rightItem.obj))
+                setJsonNoHooks(JSON.stringify(jsonObj, null, 2))
 
-                forceUpdate()
-                setJson(JSON.stringify(jsonObj, null, 2))
+                const arr: any[] = [].concat(listJson)
+                setListJson(arr)
             }
         } else if (info.key === "2") {
             toast.error("暂未支持")
         }
     }
     React.useEffect(() => {
-        setSelectData(null)
+        setSelectData({})
     }, [data]);
     React.useEffect(() => {
         if (changeJson.newData &&
@@ -191,8 +191,8 @@ export const List = ({ data = {}, index = -1 }: { data?: any, index?: number }) 
                 keys.map((key, keyIndex) => {
                     const item = data[key]
                     const type = getType(item)
-                    const isActive = (selectData === item)
-                    return (type === "array" || type === "object") ? (<ListItem onContextMenu={(e) => { handleContext(e, item, key, index) }} className={isActive ? "active" : ""} onClick={() => { handleClickItem(item, index) }} key={keyIndex}>
+                    const isActive = (selectData.val === item && selectData.key === key)
+                    return (type === "array" || type === "object") ? (<ListItem onContextMenu={(e) => { handleContext(e, item, key, index) }} className={isActive ? "active" : ""} onClick={() => { handleClickItem(item, index, key) }} key={keyIndex}>
                         <span className="left">{key}</span>
                         {
                             type === "array" ? (<span className="right">{item.length}<SlArrowRight size={14} /></span>) : (<></>)
@@ -200,7 +200,7 @@ export const List = ({ data = {}, index = -1 }: { data?: any, index?: number }) 
                         {
                             type === "object" ? (<span className="right">{Object.keys(item).length}<SlArrowRight size={14} /></span>) : (<></>)
                         }
-                    </ListItem>) : (<ListItem className={isActive ? "active" : ""} onContextMenu={(e) => { handleContext(e, item, key, index) }} onClick={() => { handleClickItem(item, index) }} key={keyIndex}>
+                    </ListItem>) : (<ListItem className={isActive ? "active" : ""} onContextMenu={(e) => { handleContext(e, item, key, index) }} onClick={() => { handleClickItem(item, index, key) }} key={keyIndex}>
                         <span className="left2">{key}</span>
                         <span className="right2">{item}</span>
                     </ListItem>)
