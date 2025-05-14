@@ -35,4 +35,9 @@ export const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
 //   ],
 // });
 export const defaultJson = JSON.stringify({
+    "aaa": 10,
+    "ccc": 20,
+    "ddd": {
+        test: "测试"
+    }
 }, null, 2);

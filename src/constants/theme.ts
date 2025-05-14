@@ -71,6 +71,8 @@ export const darkTheme = {
   MODAL_BACKGROUND: "#36393E",
   TEXT_NORMAL: "#dcddde",
   TEXT_POSITIVE: "hsl(139,calc(var(--saturation-factor, 1)*51.6%),52.2%)",
+  LIST_ITEM_LI_BG_HOVER: "rgba(255,255,255,0.1)",
+  LIST_ITEM_LI_BG_ACTIVE: "rgba(255,255,255,0.2)",
 };
 
 export const lightTheme = {
@@ -93,6 +95,8 @@ export const lightTheme = {
   MODAL_BACKGROUND: "#FFFFFF",
   TEXT_NORMAL: "#2e3338",
   TEXT_POSITIVE: "#008736",
+  LIST_ITEM_LI_BG_HOVER: "rgba(0,0,0,0.1)",
+  LIST_ITEM_LI_BG_ACTIVE: "rgba(0,0,0,0.2)",
 };
 
 const themeDs = {

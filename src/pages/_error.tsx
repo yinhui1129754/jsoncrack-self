@@ -34,9 +34,6 @@ const NotFound: React.FC = () => {
 
   return (
     <StyledNotFound>
-      <StyledImageWrapper>
-        <img src="/assets/404.svg" alt="not found" width={300} height={400} />
-      </StyledImageWrapper>
       <StyledMessage>WIZARDS BEHIND CURTAINS?</StyledMessage>
       <StyledSubMessage>
         Looks like you&apos;re lost, let&apos;s head back to the home!

@@ -1,13 +1,25 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import useConfig from "src/store/useConfig";
 import { getType } from "src/utils/getType";
 import styled from "styled-components";
 import { SlArrowRight } from "react-icons/sl";
+import { Menu, MenuRef } from "antd";
+import useStored from "src/store/useStored";
+import toast from "react-hot-toast";
 
 
+const MenuWrapper = styled.div`
+    position:fixed;
+    left:0;
+    top:0;
+    width:100%;
+    height:100%;
+    z-index:9999999;
+
+`;
 const ListWrapper = styled.div`
     width:320px;
-    border-right:1px solid #475569;
+    border-right:1px solid ${({ theme }) => theme.BACKGROUND_MODIFIER_ACCENT};
     height:100%;
     box-sizing: border-box;
     position:absolute;
@@ -20,7 +32,7 @@ const ListItem = styled.div`
     line-height:40px;
     padding-left:15px;
     padding-right:15px;
-    color:rgb(148, 163, 184);
+    color: ${({ theme }) => theme.TEXT_NORMAL};
     display:flex;
     justify-content: space-between;
     flex-wrap: nowrap;
@@ -33,16 +45,19 @@ const ListItem = styled.div`
         min-width:30px;
     }
     &.active{
-        background-color:rgba(255,255,255,0.2);
+        background-color:${({ theme }) => theme.LIST_ITEM_LI_BG_ACTIVE};
     }
     &:hover{
-        background-color:rgba(255,255,255,0.1);
+        background-color:${({ theme }) => theme.LIST_ITEM_LI_BG_HOVER};
     }
   
 `
 
 export const List = ({ data = {}, index = -1 }: { data?: any, index?: number }) => {
+    const lightmode = useStored(state => state.lightmode)
     const setListJson = useConfig(state => state.setListJson)
+    const setJson = useConfig(state => state.setJson)
+    const jsonObj = useConfig(state => state.jsonObj)
     const [selectData, setSelectData] = React.useState<any>({})
     const setNowSelect = useConfig(state => state.setNowSelect)
 
@@ -50,6 +65,18 @@ export const List = ({ data = {}, index = -1 }: { data?: any, index?: number }) 
     const isChangJson = useConfig(state => state.isChangJson)
     const changeJson = useConfig(state => state.changeJson)
     const listJson = useConfig(state => state.listJson)
+    const [visible, setVisible] = useState(false);
+
+    const [rect, setRect] = useState({ x: 0, y: 0, w: 0, h: 0 });
+
+    const [rightItem, setRightItem] = useState({ key: "", obj: {} });
+    const menuRef = useRef<MenuRef>(null);
+    const [updateFlag, setUpdateFlag] = useState(0);
+
+    // 通过更新无关状态触发渲染
+    const forceUpdate = () => {
+        setUpdateFlag(prev => prev + 1); // 修改任意状态值
+    };
     const handleClickItem = (nowData: any, index) => {
         var type = getType(nowData)
         if ((type === "array" || type === "object")) {
@@ -68,6 +95,44 @@ export const List = ({ data = {}, index = -1 }: { data?: any, index?: number }) 
         })
         setSelectData(nowData)
     }
+
+    const handleContext = (e: React.MouseEvent, dataItem, key, index) => {
+        e.preventDefault();
+        e.stopPropagation()
+        setVisible(true)
+        var tgNode = e.currentTarget
+        if (tgNode) {
+
+            var rect = tgNode.getBoundingClientRect()
+            setRect({
+                x: rect.left,
+                y: rect.top,
+                w: rect.width,
+                h: rect.height
+            })
+            setRightItem({ key: key, obj: dataItem })
+        }
+    }
+
+    const handleClickRightMenu = (info) => {
+        setVisible(false);
+        if (info.key === "1") {
+            if (rightItem.key) {
+                var key = rightItem.key + "copy"
+                var index = 0
+                while (typeof data[key] !== "undefined") {
+                    index++
+                    key = `${rightItem.key}_copy${index}`
+                }
+                data[key] = JSON.parse(JSON.stringify(rightItem.obj))
+
+                forceUpdate()
+                setJson(JSON.stringify(jsonObj, null, 2))
+            }
+        } else if (info.key === "2") {
+            toast.error("暂未支持")
+        }
+    }
     React.useEffect(() => {
         setSelectData(null)
     }, [data]);
@@ -80,7 +145,45 @@ export const List = ({ data = {}, index = -1 }: { data?: any, index?: number }) 
             }
         }
     }, [isChangJson])
+    // 精确调整菜单位置
+    React.useLayoutEffect(() => {
+        if (visible && menuRef.current) {
 
+            const menuNode = menuRef.current.menu?.list as HTMLElement;
+            if (!menuNode) return;
+
+
+            // 获取实际渲染后的菜单尺寸
+            const menuWidth = menuNode.offsetWidth;
+            const menuHeight = menuNode.offsetHeight;
+
+            // 视口当前可见区域
+            const wWidth = window.innerWidth
+            const hHeight = window.innerHeight
+
+            // 最终调整后的坐标
+            let adjustedX = rect.x;
+            let adjustedY = rect.y;
+
+            // 水平方向调整
+            if (rect.x > wWidth / 2) {
+                adjustedX = rect.x - menuWidth; // 右侧留10px边距
+            } else {
+                adjustedX = rect.x + rect.w; // 左侧留10px边距
+            }
+
+            // 垂直方向调整
+            if (rect.y > hHeight / 2) {
+                adjustedY = rect.y - menuHeight; // 右侧留10px边距
+            } else {
+                adjustedY = rect.y; // 左侧留10px边距
+            }
+            menuNode.style.position = "absolute"
+            menuNode.style.left = adjustedX + "px"
+            menuNode.style.top = adjustedY + "px"
+
+        }
+    }, [visible, rect]);
     var keys = Object.keys(data)
     return (
         <ListWrapper style={{ left: (index) * 320 + "px" }}>
@@ -89,7 +192,7 @@ export const List = ({ data = {}, index = -1 }: { data?: any, index?: number }) 
                     const item = data[key]
                     const type = getType(item)
                     const isActive = (selectData === item)
-                    return (type === "array" || type === "object") ? (<ListItem className={isActive ? "active" : ""} onClick={() => { handleClickItem(item, index) }} key={keyIndex}>
+                    return (type === "array" || type === "object") ? (<ListItem onContextMenu={(e) => { handleContext(e, item, key, index) }} className={isActive ? "active" : ""} onClick={() => { handleClickItem(item, index) }} key={keyIndex}>
                         <span className="left">{key}</span>
                         {
                             type === "array" ? (<span className="right">{item.length}<SlArrowRight size={14} /></span>) : (<></>)
@@ -97,12 +200,28 @@ export const List = ({ data = {}, index = -1 }: { data?: any, index?: number }) 
                         {
                             type === "object" ? (<span className="right">{Object.keys(item).length}<SlArrowRight size={14} /></span>) : (<></>)
                         }
-                    </ListItem>) : (<ListItem className={isActive ? "active" : ""} onClick={() => { handleClickItem(item, index) }} key={keyIndex}>
+                    </ListItem>) : (<ListItem className={isActive ? "active" : ""} onContextMenu={(e) => { handleContext(e, item, key, index) }} onClick={() => { handleClickItem(item, index) }} key={keyIndex}>
                         <span className="left2">{key}</span>
                         <span className="right2">{item}</span>
                     </ListItem>)
                 })
             }
+            {
+                visible && (<MenuWrapper onContextMenu={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation()
+                }} onClick={() => { setVisible(false) }}>
+                    <Menu
+                        ref={menuRef}
+                        onClick={(info) => {
+                            handleClickRightMenu(info)
+
+                        }}
+                        theme={lightmode ? "light" : "dark"} mode="inline" style={{ width: 200 }} items={[{ key: "1", label: "复制" }, { key: "2", label: "删除" }]} />
+                </MenuWrapper>)
+            }
+
+
         </ListWrapper>
     );
 };
