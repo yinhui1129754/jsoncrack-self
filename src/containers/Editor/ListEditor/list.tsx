@@ -5,6 +5,8 @@ import styled from "styled-components";
 import { SlArrowRight } from "react-icons/sl";
 import { Menu, MenuRef } from "antd";
 import useStored from "src/store/useStored";
+import copyText from "src/utils/copyText";
+import toast from "react-hot-toast";
 
 
 const MenuWrapper = styled.div`
@@ -35,13 +37,18 @@ const ListItem = styled.div`
     display:flex;
     justify-content: space-between;
     flex-wrap: nowrap;
-    
+    gap: 30px;
     >span{
         display:block;
         white-space: nowrap;
         text-overflow: ellipsis;
         overflow: hidden;
         min-width:30px;
+        max-width:220px;
+        &:first-child{
+            flex-shrink: 0;
+
+        }
     }
     &.active{
         background-color:${({ theme }) => theme.LIST_ITEM_LI_BG_ACTIVE};
@@ -112,6 +119,14 @@ export const List = ({ data = {}, index = -1 }: { data?: any, index?: number }) 
         }
     }
 
+    const handleDoubleClick = (key) => {
+        copyText(key).then(() => {
+            toast.success("复制key成功")
+        }).catch(() => {
+            toast.error("复制key失败")
+        })
+
+    }
     const handleClickRightMenu = (info) => {
         setVisible(false);
         if (info.key === "1") {
@@ -195,7 +210,7 @@ export const List = ({ data = {}, index = -1 }: { data?: any, index?: number }) 
                     const item = data[key]
                     const type = getType(item)
                     const isActive = (selectData.val === item && selectData.key === key)
-                    return (type === "array" || type === "object") ? (<ListItem onContextMenu={(e) => { handleContext(e, item, key, index) }} className={isActive ? "active" : ""} onClick={() => { handleClickItem(item, index, key) }} key={keyIndex}>
+                    return (type === "array" || type === "object") ? (<ListItem onContextMenu={(e) => { handleContext(e, item, key, index) }} onDoubleClick={() => { handleDoubleClick(key) }} className={isActive ? "active" : ""} onClick={() => { handleClickItem(item, index, key) }} key={keyIndex}>
                         <span className="left">{key}</span>
                         {
                             type === "array" ? (<span className="right">{item.length}<SlArrowRight size={14} /></span>) : (<></>)
@@ -203,7 +218,7 @@ export const List = ({ data = {}, index = -1 }: { data?: any, index?: number }) 
                         {
                             type === "object" ? (<span className="right">{Object.keys(item).length}<SlArrowRight size={14} /></span>) : (<></>)
                         }
-                    </ListItem>) : (<ListItem className={isActive ? "active" : ""} onContextMenu={(e) => { handleContext(e, item, key, index) }} onClick={() => { handleClickItem(item, index, key) }} key={keyIndex}>
+                    </ListItem>) : (<ListItem className={isActive ? "active" : ""} onContextMenu={(e) => { handleContext(e, item, key, index) }} onDoubleClick={() => { handleDoubleClick(key) }} onClick={() => { handleClickItem(item, index, key) }} key={keyIndex}>
                         <span className="left2">{key}</span>
                         <span className="right2">{item}</span>
                     </ListItem>)
